@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#14171f" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="ezPen. The simple infinite whiteboard for Windows. Seven pens. Room to think. No accounts, installers, or save dialogs." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ezPen — Less fuss. More drawing." />
+    <meta property="og:description" content="The simple infinite whiteboard. No accounts. No installs. Just draw." />
+    <meta name="twitter:card" content="summary" />
+    <title>ezPen — Less fuss. More drawing.</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <svg class="filter-definitions" width="0" height="0" aria-hidden="true">
+      <defs>
+        <filter id="chalk-edge" x="-5%" y="-25%" width="110%" height="150%">
+          <feTurbulence type="fractalNoise" baseFrequency=".045 .18" numOctaves="3" seed="12" result="grain" />
+          <feDisplacementMap in="SourceGraphic" in2="grain" scale="2.2" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <header class="site-header wrap">
+      <a class="brand" href="#" aria-label="ezPen home">
+        <img src="/brand/ezpen-white.png" alt="" width="59" height="43" />
+        <span>ezPen<span class="brand-dot">.</span></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#tools">The tools</a>
+        <a href="#download">Get ezPen <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <p class="eyebrow">THE SIMPLE INFINITE WHITEBOARD</p>
+        <div class="hero-heading">
+          <h1 id="hero-title">Less fuss.<br />More <span class="marked-word">drawing.
+            <svg class="chalk-line hero-underline" viewBox="0 0 550 28" preserveAspectRatio="none" aria-hidden="true"><path d="M8 17C117 3 259 22 540 9" /><path class="second-pass" d="M16 23C175 12 345 21 524 15" /></svg>
+          </span></h1>
+          <div class="hero-aside">
+            <span class="handwritten hero-note">a whiteboard.<br />not a whole thing.</span>
+            <svg class="chalk-line note-arrow" viewBox="0 0 130 100" aria-hidden="true"><path d="M99 7C114 40 71 71 18 72m0 0 17-14M18 72l20 8" /></svg>
+          </div>
+        </div>
+        <p class="hero-summary">Open it. Get an idea down. See where it goes.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#download">Get ezPen for Windows <span aria-hidden="true">↗</span></a>
+          <span class="hero-promise">No accounts. No installs. No save dialogs.</span>
+        </div>
+
+        <figure class="product-figure" aria-label="Reserved space for an ezPen application capture">
+          <div class="capture-note handwritten" aria-hidden="true">room for your ideas
+            <svg class="chalk-line" viewBox="0 0 90 55"><path d="M8 4c4 22 34 13 53 33m0 0-2-17m2 17-17-2" /></svg>
+          </div>
+          <img src="/ezpen-hero.png" alt="ezPen on an infinite canvas with pens and doodles" width="1034" height="709" fetchpriority="high" />
+        </figure>
+      </section>
+
+      <section class="tools-section wrap" id="tools" aria-labelledby="tools-title">
+        <div class="tools-heading">
+          <h2 id="tools-title">Pick a pen.<br /><span class="handwritten">Make a mark.</span></h2>
+          <p>Seven different feels. One quiet canvas.</p>
+        </div>
+        <ul class="pen-shelf" aria-label="The seven ezPen pens">
+          <li><img src="/icons/fineliner.png" alt="" width="74" height="141" /><span>Fineliner</span></li>
+          <li><img src="/icons/pencil.png" alt="" width="81" height="133" /><span>Pencil</span></li>
+          <li><img src="/icons/brush.png" alt="" width="69" height="149" /><span>Paintbrush</span></li>
+          <li><img src="/icons/marker.png" alt="" width="82" height="126" /><span>Marker</span></li>
+          <li><img src="/icons/marker.png" alt="" width="82" height="126" /><span>Chisel</span></li>
+          <li><img src="/icons/chalk.png" alt="" width="75" height="126" /><span>Chalk</span></li>
+          <li><img src="/icons/marker.png" alt="" width="82" height="126" /><span>Chalk marker</span></li>
+        </ul>
+        <svg class="chalk-line shelf-line" viewBox="0 0 1100 25" preserveAspectRatio="none" aria-hidden="true"><path d="M7 15C168 7 259 20 433 13S872 18 1091 9" /><path class="second-pass" d="M22 21C314 15 728 25 1080 15" /></svg>
+        <div class="shelf-caption"><span>Actual icons. Straight from ezPen.</span><span class="handwritten">the good kind of pixel-perfect.</span></div>
+      </section>
+
+      <section class="essentials wrap" aria-label="A few things, done properly">
+        <article>
+          <div class="feature-icon"><img src="/icons/fit-all.png" alt="" width="117" height="110" /></div>
+          <h2>Room for everything.</h2>
+          <p>Infinite canvas. Double-tap <kbd>Ctrl</kbd> to see it all.</p>
+          <svg class="chalk-line feature-mark" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true"><path d="M5 9q101-8 229-2" /></svg>
+        </article>
+        <article>
+          <div class="feature-icon"><img src="/icons/undo.png" alt="" width="103" height="103" /></div>
+          <h2>Change your mind.</h2>
+          <p>Undo. Redo. Even the ideas you erased.</p>
+          <svg class="chalk-line feature-mark" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true"><path d="M5 9q101-8 229-2" /></svg>
+        </article>
+        <article>
+          <div class="feature-icon"><img src="/icons/eyedropper.png" alt="" width="104" height="135" /></div>
+          <h2>That colour. Anywhere.</h2>
+          <p>Pick a colour from anywhere on your screen.</p>
+          <svg class="chalk-line feature-mark" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true"><path d="M5 9q101-8 229-2" /></svg>
+        </article>
+      </section>
+
+      <section class="download-section wrap" id="download" aria-labelledby="download-title">
+        <svg class="chalk-line download-loop" viewBox="0 0 260 200" aria-hidden="true"><path d="M44 68C5 109 53 160 142 153s117-75 56-102C141 25 55 31 27 76" /></svg>
+        <p class="handwritten download-note-heading">less setup. more scribbling.</p>
+        <h2 id="download-title">Just <span>draw.</span></h2>
+        <p class="download-subtitle">Native Windows. Fast by design. Yours to doodle on.</p>
+        <div id="download-action">
+          <span class="release-status"><span class="status-dot"></span> Windows release in preparation</span>
+          <p class="download-note">The public download will be here.</p>
+        </div>
+        <p class="system-requirements">Windows 10 / 11 · 64-bit · OpenGL 3.3+</p>
+      </section>
+
+      <div class="practical wrap">
+        <details>
+          <summary>A few details <span aria-hidden="true">+</span></summary>
+          <div class="details-content">
+            <p><strong>Saved. Automatically.</strong> Boards stay on your computer in <code>%LOCALAPPDATA%\ezpen</code>. Use <code>--portable</code> to keep everything beside the app.</p>
+            <p><strong>Undo goes back.</strong> Recent actions stay in memory; older history lives on disk. Drawing after undo replaces the redo branch.</p>
+            <p><strong>Windows, for now.</strong> A standalone executable. No installer, account, or bundled browser.</p>
+          </div>
+        </details>
+      </div>
+    </main>
+
+    <footer class="site-footer wrap">
+      <a class="brand" href="#" aria-label="ezPen home"><img src="/brand/ezpen-white.png" alt="" width="46" height="34" /><span>ezPen<span class="brand-dot">.</span></span></a>
+      <span>A few things, done properly.</span>
+      <a href="#main">Back up <span aria-hidden="true">↑</span></a>
+    </footer>
+  </body>
+</html>
