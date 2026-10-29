@@ -85,16 +85,49 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 .shelf-line path { stroke-width: 2; }
 .shelf-caption { display: flex; align-items: center; justify-content: space-between; gap: 22px; margin-top: 15px; color: var(--muted); font-size: 10px; }
 .shelf-caption .handwritten { color: var(--pink); font-size: 15px; transform: rotate(-2deg); }
-.essentials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 65px; padding-block: 105px 90px; }
-.essentials article { position: relative; }
+
+/* Pen hover: collapse others to the right, show only the hovered pen + stroke image */
+@media (min-width: 761px) {
+  .pen-shelf { display: flex; gap: 24px; flex-wrap: nowrap; padding-bottom: 60px; }
+  .pen-shelf li { flex: 0 0 auto; flex-direction: column; align-items: center; gap: 24px; min-width: 0; transition: all 0.35s ease; }
+  .pen-shelf li img { width: auto; height: 102px; max-width: 100%; }
+  .pen-item { position: relative; }
+  .pen-stroke { display: none; margin-top: 46px; width: 100%; }
+  .pen-stroke img { width: 100%; height: auto; border-radius: 3px; display: block; }
+  .pen-shelf:hover .pen-item:not(:hover) {
+    flex: 0 0 0;
+    width: 0;
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+  }
+  .pen-shelf:hover .pen-item:hover {
+    flex: 1 1 auto;
+    align-items: flex-start;
+  }
+  .pen-shelf:hover .pen-item:hover .pen-stroke {
+    display: block;
+  }
+  .pen-shelf:hover .pen-item:hover span { white-space: normal; text-align: left; }
+  .pen-shelf li:nth-child(2n) img { transform: rotate(6deg); }
+  .pen-shelf li:nth-child(3n) img { transform: rotate(-5deg); }
+}
+.essentials { display: flex; flex-direction: column; gap: 90px; padding-block: 105px 90px; }
+.feature { display: flex; align-items: center; gap: 60px; position: relative; }
+.feature-image-left { flex-direction: row; }
+.feature-image-right { flex-direction: row-reverse; }
+.feature-image { flex: 0 0 45%; }
+.feature-content { flex: 1; }
 .feature-icon { height: 70px; display: flex; align-items: center; margin-bottom: 20px; }
 .feature-icon img { width: 54px; height: 58px; object-fit: contain; }
-.essentials h2 { font-size: 22px; font-weight: 550; letter-spacing: -.035em; line-height: 1.4; }
-.essentials p { font-size: 13px; margin-top: 11px; max-width: 235px; }
+.feature-image img { width: 100%; height: auto; border-radius: 3px; display: block; }
+.essentials h2 { font-size: 22px; font-weight: 550; letter-spacing: -.035em; line-height: 1.4; margin: 0; }
+.essentials p { font-size: 13px; margin-top: 11px; max-width: 420px; margin-bottom: 0; }
 kbd { font: inherit; color: #e0e3ef; }
 .feature-mark { width: 85px; height: 12px; margin-top: 17px; color: var(--cyan); }
-.essentials article:nth-child(2) .feature-mark { color: var(--pink); width: 105px; }
-.essentials article:nth-child(3) .feature-mark { color: var(--violet); width: 95px; }
+.essentials .feature-image-right .feature-mark { color: var(--pink); width: 105px; }
+.essentials .feature-image-left:nth-child(3) .feature-mark { color: var(--violet); width: 95px; }
 .download-section { position: relative; padding: 74px 0 58px; text-align: center; }
 .download-note-heading { color: var(--muted); font-size: 19px; transform: rotate(-3deg); }
 .download-section h2 { position: relative; display: inline-block; font-size: clamp(72px, 8vw, 110px); line-height: 1.3; font-weight: 550; letter-spacing: -.065em; margin-top: 15px; }
@@ -129,7 +162,7 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .wrap { width: calc(100% - 72px); }
   .hero-aside { margin-right: 10px; }
   .hero-note { font-size: 20px; }
-  .essentials { gap: 35px; }
+  .essentials { gap: 65px; }
   .essentials h2 { font-size: 20px; }
 }
 @media (max-width: 760px) {
@@ -151,7 +184,7 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .tools-heading h2 { font-size: 33px; }
   .tools-heading h2 .handwritten { font-size: 28px; }
   .tools-heading > p { max-width: 180px; font-size: 12px; }
-  .pen-shelf { gap: 10px; margin-top: 35px; }
+  .pen-shelf { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 35px; }
   .pen-shelf img { height: 78px; }
   .pen-shelf span { font-size: 10px; }
   .shelf-caption .handwritten { font-size: 12px; }
@@ -193,7 +226,10 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .pen-shelf span { font-size: 10px; }
   .shelf-caption { display: block; font-size: 9px; line-height: 1.8; }
   .shelf-caption .handwritten { display: block; margin-top: 8px; }
-  .essentials { grid-template-columns: 1fr; gap: 38px; padding-top: 65px; }
+  .essentials { gap: 38px; padding-top: 65px; }
+  .essentials .feature { flex-direction: column; gap: 24px; }
+  .essentials .feature-image-left, .essentials .feature-image-right { flex-direction: column; }
+  .essentials .feature-image { width: 100%; }
   .essentials article { padding-left: 81px; min-height: 110px; }
   .feature-icon { position: absolute; left: 0; top: 0; height: 65px; margin: 0; }
   .feature-icon img { width: 53px; height: 60px; }

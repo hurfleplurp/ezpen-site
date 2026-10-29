@@ -57,8 +57,8 @@ test('page loads cleanly, navigation works, and no pretend download is offered',
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
   await expect(page).toHaveTitle(/ezPen/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Less fuss.More drawing.');
-  await page.getByRole('link', { name: 'Get ezPen for Windows' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Easyis better.');
+  await page.getByRole('link', { name: 'Get ezPen' }).click();
   await expect(page).toHaveURL(/#download$/);
   await expect(page.getByText('Windows release in preparation')).toBeVisible();
   await expect(page.locator('#download-action a')).toHaveCount(0);
@@ -99,9 +99,9 @@ test('download configuration rejects unsafe or malformed links', () => {
 
 test('the seven pens and three features use real application icons', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.pen-shelf li')).toHaveText(['Fineliner', 'Pencil', 'Paintbrush', 'Marker', 'Chisel', 'Chalk', 'Chalk marker']);
-  expect(await page.locator('.pen-shelf img').evaluateAll(images => images.map(image => image.getAttribute('src'))))
-    .toEqual(['/icons/fineliner.png', '/icons/pencil.png', '/icons/brush.png', '/icons/marker.png', '/icons/marker.png', '/icons/chalk.png', '/icons/marker.png']);
+  await expect(page.locator('.pen-shelf li')).toHaveText(['Fineliner', 'Pencil', 'Paintbrush', 'Marker', 'Chalk', 'Chalk marker']);
+  expect(await page.locator('.pen-shelf img[src^="/icons/"]').evaluateAll(images => images.map(image => image.getAttribute('src'))))
+    .toEqual(['/icons/fineliner.png', '/icons/pencil.png', '/icons/brush.png', '/icons/marker.png', '/icons/chalk.png', '/icons/marker.png']);
   expect(await page.locator('.feature-icon img').evaluateAll(images => images.map(image => image.getAttribute('src'))))
     .toEqual(['/icons/fit-all.png', '/icons/undo.png', '/icons/eyedropper.png']);
   const icons = await page.locator('img[src^="/icons/"]').evaluateAll(images => images.map(image => ({
@@ -109,7 +109,7 @@ test('the seven pens and three features use real application icons', async ({ pa
     ratio: image.naturalWidth / image.naturalHeight,
     expectedRatio: Number(image.getAttribute('width')) / Number(image.getAttribute('height')),
   })));
-  expect(icons).toHaveLength(10);
+  expect(icons).toHaveLength(9);
   for (const icon of icons) {
     expect(icon.loaded).toBe(true);
     expect(icon.ratio).toBeCloseTo(icon.expectedRatio, 3);
@@ -145,8 +145,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await expect(page.locator('img[src*="ezpen-hero.png"]')).toBeVisible();
-    for (const icon of await page.locator('.pen-shelf img').all()) {
-      await icon.scrollIntoViewIfNeeded();
+    for (const icon of await page.locator('.pen-shelf img[src^="/icons/"]').all()) {
       await expect(icon).toBeVisible();
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
