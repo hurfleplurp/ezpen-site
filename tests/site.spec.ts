@@ -101,7 +101,7 @@ test('the seven pens and three features use real application icons', async ({ pa
   await page.goto('/');
   await expect(page.locator('.pen-shelf li')).toHaveText(['Fineliner', 'Pencil', 'Paintbrush', 'Marker', 'Chalk', 'Chalk marker']);
   expect(await page.locator('.pen-shelf img[src^="/icons/"]').evaluateAll(images => images.map(image => image.getAttribute('src'))))
-    .toEqual(['/icons/fineliner.png', '/icons/pencil.png', '/icons/brush.png', '/icons/marker.png', '/icons/chalk.png', '/icons/marker.png']);
+    .toEqual(['/icons/fineliner.png', '/icons/pencil.png', '/icons/brush.png', '/icons/marker.png', '/icons/chalk.png', '/icons/chalk_marker.png']);
   expect(await page.locator('.feature-icon img').evaluateAll(images => images.map(image => image.getAttribute('src'))))
     .toEqual(['/icons/fit-all.png', '/icons/undo.png', '/icons/eyedropper.png']);
   const icons = await page.locator('img[src^="/icons/"]').evaluateAll(images => images.map(image => ({
