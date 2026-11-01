@@ -97,7 +97,7 @@ test('download configuration rejects unsafe or malformed links', () => {
   }
 });
 
-test('the seven pens and three features use real application icons', async ({ page }) => {
+test('the six pens and three features use real application icons', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.pen-shelf li')).toHaveText(['Fineliner', 'Pencil', 'Paintbrush', 'Marker', 'Chalk', 'Chalk marker']);
   expect(await page.locator('.pen-shelf img[src^="/icons/"]').evaluateAll(images => images.map(image => image.getAttribute('src'))))
@@ -125,6 +125,129 @@ test('practical details stay tucked away and open with the keyboard', async ({ p
   await page.keyboard.press('Enter');
   await expect(page.getByText('Boards stay on your computer', { exact: false })).toBeVisible();
   await expect(page.locator('summary')).toHaveCount(1);
+});
+
+for (const width of [768, 1024, 1440]) {
+  test(`pen previews expand in place without disappearing at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const shelf = page.locator('.pen-shelf');
+    const items = shelf.locator('.pen-item');
+    await shelf.scrollIntoViewIfNeeded();
+    await page.mouse.move(0, 0);
+    const original = await items.evaluateAll(elements => elements.map(element => element.getBoundingClientRect().width));
+    for (let index = 0; index < 6; index++) {
+      await items.nth(index).locator('button').hover();
+      await expect(items.nth(index)).toHaveClass(/is-active/);
+      await expect(shelf.locator('.pen-stroke:visible')).toHaveCount(1);
+      await expect(items.nth(index).locator('button')).toHaveAttribute('aria-expanded', 'true');
+      await page.waitForTimeout(350);
+      const positions = await items.evaluateAll(elements => elements.map(element => {
+        const bounds = element.getBoundingClientRect();
+        const button = element.querySelector('button')!.getBoundingClientRect();
+        const stroke = element.querySelector('.pen-stroke')!.getBoundingClientRect();
+        return { x: bounds.x, width: bounds.width, buttonRight: button.right, strokeX: stroke.x, strokeY: stroke.y, strokeHeight: stroke.height };
+      }));
+      const selected = positions[index];
+      expect(selected.strokeX).toBeGreaterThan(selected.buttonRight);
+      expect(selected.width).toBeGreaterThan(original[index]);
+      for (let other = 0; other < 6; other++) {
+        await expect(items.nth(other).locator('button img')).toBeVisible();
+        expect(positions[other].width).toBeGreaterThan(0);
+        if (other > index) expect(positions[other].x).toBeGreaterThan(selected.strokeX);
+      }
+      // A stationary pointer and movement into the preview must not lose the selection.
+      await page.mouse.move(selected.strokeX + 5, selected.strokeY + selected.strokeHeight / 2);
+      await expect(items.nth(index)).toHaveClass(/is-active/);
+      const imageStyle = await items.nth(index).locator('.pen-stroke img').evaluate(image => ({
+        transform: getComputedStyle(image).transform,
+        fit: getComputedStyle(image).objectFit,
+      }));
+      expect(imageStyle).toEqual({ transform: 'none', fit: 'contain' });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+      await page.mouse.move(0, 0);
+      await expect(shelf).not.toHaveAttribute('data-active');
+      await expect(shelf.locator('.pen-stroke:visible')).toHaveCount(0);
+      await page.waitForTimeout(350);
+      const restored = await items.evaluateAll(elements => elements.map(element => element.getBoundingClientRect().width));
+      restored.forEach((value, item) => expect(value).toBeCloseTo(original[item], 0));
+    }
+    // Entering a gap before selecting a pen must leave the entire shelf visible.
+    const first = await items.first().boundingBox();
+    const second = await items.nth(1).boundingBox();
+    if (!first || !second) throw new Error('Missing pen bounds.');
+    await page.mouse.move((first.x + first.width + second.x) / 2, first.y + first.height / 2);
+    await expect(shelf.locator('.is-active')).toHaveCount(0);
+    for (const button of await shelf.locator('button').all()) await expect(button).toBeVisible();
+    await items.nth(1).locator('button').hover();
+    await expect(items.nth(1)).toHaveClass(/is-active/);
+    await page.waitForTimeout(350);
+    await items.last().locator('button').hover();
+    await expect(items.last()).toHaveClass(/is-active/);
+    await page.waitForTimeout(350);
+    const pen = await items.last().locator('button').boundingBox();
+    const preview = await items.last().locator('.pen-stroke').boundingBox();
+    if (!pen || !preview) throw new Error('Missing expanded pen bounds.');
+    await page.mouse.move((pen.x + pen.width + preview.x) / 2, pen.y + pen.height / 2);
+    await expect(items.last()).toHaveClass(/is-active/);
+    await expect(shelf.locator('.is-active')).toHaveCount(1);
+    for (const button of await shelf.locator('button').all()) await expect(button).toBeVisible();
+  });
+}
+
+test('stroke previews load the real horizontal captures, not the old placeholders', async ({ page }) => {
+  await page.goto('/');
+  const images = await page.locator('.pen-stroke img').evaluateAll(async elements => {
+    return await Promise.all(elements.map(async image => {
+      await image.decode();
+      return {
+        source: image.getAttribute('src'),
+        width: image.naturalWidth,
+        height: image.naturalHeight,
+        declaredWidth: Number(image.getAttribute('width')),
+        declaredHeight: Number(image.getAttribute('height')),
+      };
+    }));
+  });
+  expect(images.map(image => image.source)).toEqual([
+    '/strokes/fineliner_stroke.png', '/strokes/pencil_stroke.png', '/strokes/brush_stroke.png',
+    '/strokes/marker_stroke.png', '/strokes/chalk_stroke.png', '/strokes/chalk_marker_stroke.png',
+  ]);
+  for (const image of images) {
+    expect(image.width).toBeGreaterThan(600);
+    expect(image.width / image.height).toBeGreaterThan(2.5);
+    expect(image.declaredWidth).toBe(image.width);
+    expect(image.declaredHeight).toBe(image.height);
+  }
+});
+
+test('pen previews support keyboard and touch without hiding neighbouring pens', async ({ page }) => {
+  await page.goto('/');
+  const buttons = page.locator('.pen-choice');
+  await buttons.first().focus();
+  await expect(buttons.first()).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Tab');
+  await expect(buttons.nth(1)).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.pen-item.is-active')).toHaveCount(0);
+  await page.keyboard.press('Tab');
+  await expect(buttons.nth(2)).toHaveAttribute('aria-expanded', 'true');
+  await page.getByRole('link', { name: 'Get ezPen', exact: true }).focus();
+  await expect(page.locator('.pen-item.is-active')).toHaveCount(0);
+});
+
+test('touch can toggle a horizontal preview on a narrow screen', async ({ browser }) => {
+  const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 900 } });
+  const page = await context.newPage();
+  await page.goto('http://127.0.0.1:4178');
+  const button = page.getByRole('button', { name: 'Chalk marker', exact: true });
+  await button.tap();
+  await expect(button).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#stroke-chalk-marker')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await button.tap();
+  await expect(button).toHaveAttribute('aria-expanded', 'false');
+  await context.close();
 });
 
 test('copy stays short, with chalk accents instead of feature essays', async ({ page }) => {

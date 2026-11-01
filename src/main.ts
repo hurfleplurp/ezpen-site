@@ -39,4 +39,69 @@ function setupRelease(): void {
   }
 }
 
+function setupPenShelf(): void {
+  const shelf = requiredElement<HTMLUListElement>('.pen-shelf');
+  const items = Array.from(shelf.querySelectorAll<HTMLLIElement>('.pen-item'));
+  const choices = items.map(item => {
+    const button = item.querySelector<HTMLButtonElement>('.pen-choice');
+    const stroke = item.querySelector<HTMLElement>('.pen-stroke');
+    if (!button || !stroke) throw new Error('Missing pen choice or stroke preview.');
+    return { item, button, stroke };
+  });
+  let active: HTMLLIElement | null = null;
+  let keyboardSelection = false;
+
+  const select = (selected: HTMLLIElement | null): void => {
+    active = selected;
+    shelf.toggleAttribute('data-active', selected !== null);
+    for (const { item, button, stroke } of choices) {
+      const expanded = item === selected;
+      item.classList.toggle('is-active', expanded);
+      button.setAttribute('aria-expanded', String(expanded));
+      stroke.setAttribute('aria-hidden', String(!expanded));
+    }
+  };
+
+  // Track actual pointer movement, not enter/leave events caused by the shelf reflowing.
+  shelf.addEventListener('pointermove', event => {
+    if (event.pointerType === 'touch') return;
+    keyboardSelection = false;
+    if (!(event.target instanceof Element)) return;
+    const item = event.target.closest<HTMLLIElement>('.pen-item');
+    if (item && items.includes(item) && item !== active) select(item);
+  });
+  shelf.addEventListener('pointerleave', event => {
+    if (event.pointerType !== 'touch' && !keyboardSelection) select(null);
+  });
+  shelf.addEventListener('focusout', event => {
+    if (!(event.relatedTarget instanceof Node) || !shelf.contains(event.relatedTarget)) {
+      keyboardSelection = false;
+      select(null);
+    }
+  });
+  shelf.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      keyboardSelection = false;
+      select(null);
+    }
+  });
+  for (const { item, button } of choices) {
+    button.addEventListener('focus', () => {
+      if (button.matches(':focus-visible')) {
+        keyboardSelection = true;
+        select(item);
+      }
+    });
+    button.addEventListener('click', event => {
+      if (event.detail === 0) {
+        keyboardSelection = true;
+        select(item);
+      } else {
+        select(active === item ? null : item);
+      }
+    });
+  }
+}
+
 setupRelease();
+setupPenShelf();
