@@ -104,10 +104,15 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
   }
   .pen-shelf:hover .pen-item:hover {
     flex: 1 1 auto;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
   }
   .pen-shelf:hover .pen-item:hover .pen-stroke {
     display: block;
+    width: auto;
+    max-width: 340px;
+    margin-top: 0;
   }
   .pen-shelf:hover .pen-item:hover span { white-space: normal; text-align: left; }
   .pen-shelf li:nth-child(2n) img { transform: rotate(6deg); }
