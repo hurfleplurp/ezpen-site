@@ -73,7 +73,7 @@ test('hero displays the supplied artwork without a browser drawing imitation', a
   await page.goto('/');
   const hero = page.locator('.product-figure img');
   await expect(hero).toBeVisible();
-  await expect(hero).toHaveAttribute('src', '/ezpen-main.png');
+  await expect(hero).toHaveAttribute('src', '/ezpen-main.png?v=d6c1e6f0');
   await expect(hero).toHaveAttribute('width', '1229');
   await expect(hero).toHaveAttribute('height', '768');
   expect(await hero.evaluate(image => ({ width: image.naturalWidth, height: image.naturalHeight })))
@@ -336,7 +336,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     await page.goto('/');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(page.locator('.product-figure img[src="/ezpen-main.png"]')).toBeVisible();
+    await expect(page.locator('.product-figure img[src="/ezpen-main.png?v=d6c1e6f0"]')).toBeVisible();
     for (const icon of await page.locator('.pen-shelf img[src^="/icons/"]').all()) {
       await expect(icon).toBeVisible();
     }
