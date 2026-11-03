@@ -37,12 +37,13 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 - To replace the hero asset, place the new file in `public` and update the image inside `.product-figure`, including its descriptive alt text and actual dimensions. The figure styles support responsive images or video without cropping.
 - For a film, use a `<video controls playsinline preload="metadata" poster="/ezpen-hero.webp">` element with the actual source and accessible fallback text in the same figure. Do not autoplay.
 - The infinite-canvas and "Watch it back" features use the supplied looping APNGs unchanged. First-frame stills are shown instead when the visitor prefers reduced motion.
+- The native pen feature uses the supplied `public/screenshots/stylus-feature.png` artwork.
 - The tool shelf and feature illustrations use the actual application icons, not redrawn approximations. The former simulated pen studies and per-pen marketing paragraphs have been removed.
 - `public/icons` contains application icons, including the supplied replacements for Marker, Chalk, and Chalk Marker.
 - The pen shelf keeps every pen accessible. Hovering expands the selected item with a horizontal stroke preview immediately to its right; earlier pens stay left and later pens move right. Leaving the shelf restores the evenly spaced row. Keyboard focus also previews a pen (Escape closes it), and touch users can tap to toggle. Selection is driven by pointer movement rather than layout-triggered hover events to prevent disappearance during reflow.
 - Stroke previews in `public/strokes` are the real application captures (`fineliner_stroke.png`, `pencil_stroke.png`, `brush_stroke.png`, `marker_stroke.png`, `chalk_stroke.png`, `chalk_marker_stroke.png`). They were copied unchanged from the application's `Exports` folder. Keep their actual intrinsic dimensions in `index.html`; the layout preserves their aspect ratio without cropping or rotation. These filenames replace the old labelled placeholders.
 - Decorative marker lines and grain are website decoration, not examples of the application's ink rendering. Your real hero capture remains the place to demonstrate that.
-- Copy prioritises the product's simple, local, no-account workflow. It avoids unverified latency, memory, frame-rate, download-size, and competitive benchmark claims.
+- Copy prioritises the product's simple, local, no-account workflow. Feature claims reflect copy supplied by the product owner, not independently measured benchmarks.
 - Storage, undo history, and platform details are kept in one collapsed "A few details" disclosure rather than full-length feature sections.
 
 ## Validation

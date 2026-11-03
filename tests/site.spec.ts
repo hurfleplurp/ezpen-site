@@ -186,6 +186,26 @@ test('undo timeline highlight plays the supplied looping APNG in an alternating 
   await expect.poll(() => image.evaluate(element => element.currentSrc)).toContain('/screenshots/undo-timeline-poster.png');
 });
 
+test('native pen highlight shows the supplied artwork and requested copy', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const feature = page.locator('.feature-stylus');
+  await expect(feature.getByRole('heading', { name: 'Native pen support.' })).toBeVisible();
+  await expect(feature.locator('p')).toHaveText('Full range pressure sensitivity. Zero latency means responsive, natural lines.');
+  const image = feature.locator('img');
+  await expect(image).toHaveAttribute('src', '/screenshots/stylus-feature.png');
+  await expect(image).toBeVisible();
+  expect(await image.evaluate(element => ({ width: element.naturalWidth, height: element.naturalHeight })))
+    .toEqual({ width: 1295, height: 768 });
+  const media = await image.boundingBox();
+  const text = await feature.locator('.feature-content').boundingBox();
+  if (!media || !text) throw new Error('Missing native pen feature layout.');
+  expect(media.x + media.width).toBeLessThan(text.x);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(image).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
 test('practical details stay tucked away and open with the keyboard', async ({ page }) => {
   await page.goto('/');
   const question = page.locator('summary').filter({ hasText: 'A few details' });
@@ -397,7 +417,7 @@ test('artwork colors are sampled from the hero and used as accents', async ({ pa
   });
   expect(result.tokens).toEqual(['#8a1bff', '#ec2dff', '#00e7e7', '#f1f907']);
   expect(result.found).toEqual([true, true, true, true]);
-  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)']);
+  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)', 'rgb(0, 231, 231)']);
   await expect(page.locator('.hero-underline')).toHaveCSS('color', 'rgb(236, 45, 255)');
   await expect(page.locator('.button-primary').first()).toHaveCSS('background-color', 'rgb(0, 231, 231)');
 });
