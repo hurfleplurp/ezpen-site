@@ -117,6 +117,41 @@ test('the six pens and three features use real application icons', async ({ page
   await expect(page.locator('#pen-art, [role="tablist"]')).toHaveCount(0);
 });
 
+test('undo timeline highlight has the supplied playable demo in an alternating layout', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const feature = page.locator('.feature-timeline');
+  await expect(feature.getByRole('heading', { name: 'Watch it back.' })).toBeVisible();
+  await expect(feature.locator('p')).toHaveText('The undo timeline lets you go back to any point in time instantly. Press play and watch back the creative process.');
+  const video = feature.locator('video');
+  await expect(video).toHaveAttribute('controls', '');
+  await expect(video).not.toHaveAttribute('autoplay', '');
+  await expect(video.locator('source')).toHaveAttribute('src', '/screenshots/undo-timeline.mp4');
+  await expect(video).toHaveAttribute('poster', '/screenshots/undo-timeline-poster.png');
+  const media = await video.boundingBox();
+  const text = await feature.locator('.feature-content').boundingBox();
+  if (!media || !text) throw new Error('Missing timeline feature layout.');
+  expect(media.x).toBeGreaterThan(text.x + text.width);
+  const playback = await video.evaluate(async element => {
+    if (!(element instanceof HTMLVideoElement)) throw new Error('Expected a video element.');
+    await element.play();
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Timeline video did not start playing.')), 5000);
+      element.addEventListener('timeupdate', () => { clearTimeout(timeout); resolve(); }, { once: true });
+    });
+    const result = { width: element.videoWidth, height: element.videoHeight, duration: element.duration, time: element.currentTime };
+    element.pause();
+    return result;
+  });
+  expect(playback.width).toBe(1280);
+  expect(playback.height).toBe(802);
+  expect(playback.duration).toBeGreaterThan(19);
+  expect(playback.time).toBeGreaterThan(0);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(video).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
 test('practical details stay tucked away and open with the keyboard', async ({ page }) => {
   await page.goto('/');
   const question = page.locator('summary').filter({ hasText: 'A few details' });
