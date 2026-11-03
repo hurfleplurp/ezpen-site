@@ -127,8 +127,8 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 kbd { font: inherit; color: #e0e3ef; }
 .feature-mark { width: 85px; height: 12px; margin-top: 17px; color: var(--art-cyan); }
 .essentials .feature-image-right .feature-mark { color: var(--art-magenta); width: 105px; }
-.essentials .feature-image-left:nth-child(3) .feature-mark { color: var(--art-purple); width: 95px; }
-.essentials .feature-timeline .feature-mark { color: var(--art-yellow); }
+.essentials .feature-timeline .feature-mark { color: var(--art-purple); width: 95px; }
+.essentials .feature-stylus .feature-mark { color: var(--art-yellow); }
 .download-section { position: relative; padding: 74px 0 58px; text-align: center; }
 .download-note-heading { color: var(--muted); font-size: 19px; transform: rotate(-3deg); }
 .download-section h2 { position: relative; display: inline-block; font-size: clamp(72px, 8vw, 110px); line-height: 1.3; font-weight: 550; letter-spacing: -.065em; margin-top: 15px; }

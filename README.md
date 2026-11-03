@@ -38,6 +38,7 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 - For a film, use a `<video controls playsinline preload="metadata" poster="/ezpen-hero.webp">` element with the actual source and accessible fallback text in the same figure. Do not autoplay.
 - The infinite-canvas, "Watch it back", and "Like Glass" features use the supplied looping APNGs unchanged. First-frame stills are shown instead when the visitor prefers reduced motion.
 - The native pen feature uses the supplied `public/screenshots/stylus-feature.png` artwork.
+- Feature highlights appear in order: infinite canvas, Like Glass, Watch it back, and native pen support. Their images alternate sides on desktop.
 - The tool shelf and feature illustrations use the actual application icons, not redrawn approximations. The former simulated pen studies and per-pen marketing paragraphs have been removed.
 - `public/icons` contains application icons, including the supplied replacements for Marker, Chalk, and Chalk Marker.
 - The pen shelf keeps every pen accessible. Hovering expands the selected item with a horizontal stroke preview immediately to its right; earlier pens stay left and later pens move right. Leaving the shelf restores the evenly spaced row. Keyboard focus also previews a pen (Escape closes it), and touch users can tap to toggle. Selection is driven by pointer movement rather than layout-triggered hover events to prevent disappearance during reflow.
