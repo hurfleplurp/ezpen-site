@@ -31,7 +31,7 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 
 ## Visuals and product copy
 
-- A concise chalkboard-inspired page: blue-black grain, chalk-white type, handwritten notes, and cyan/pink marker strokes. It stays dark under both system preferences. Colour and handwriting tokens are at the top of `src/style.css`; handwriting uses local system fonts, with no external font requests.
+- A concise chalkboard-inspired page: blue-black grain, chalk-white type, handwritten notes, and marker strokes. Four `--art-*` accent tokens in `src/style.css` are sampled directly from `public/ezpen-main.png`: purple `#8a1bff`, magenta `#ec2dff`, cyan `#00e7e7`, and yellow `#f1f907`. The original softer accents remain available for other text and details. The site stays dark under both system preferences and uses local system fonts, with no external font requests.
 - Optimised supplied logo derivatives live in `public/brand`; originals are untouched in `Logos`. Both derivatives preserve the full nontransparent artwork bounds with transparent padding, including the complete bottom flourish. Do not crop using assumed source-image dimensions. A regression test compares their silhouettes against the originals.
 - The hero displays the supplied artwork in `public/ezpen-main.png`. There is no browser drawing demo or imitation application UI.
 - To replace the hero asset, place the new file in `public` and update the image inside `.product-figure`, including its descriptive alt text and actual dimensions. The figure styles support responsive images or video without cropping.

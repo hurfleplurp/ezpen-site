@@ -368,6 +368,40 @@ test('surfaces remain dark and blue-grey under both system preferences', async (
   }
 });
 
+test('artwork colors are sampled from the hero and used as accents', async ({ page }) => {
+  await page.goto('/');
+  const result = await page.evaluate(() => {
+    const hero = document.querySelector<HTMLImageElement>('.product-figure img');
+    if (!hero || !hero.complete || !hero.naturalWidth) throw new Error('Hero image unavailable.');
+    const canvas = document.createElement('canvas');
+    canvas.width = hero.naturalWidth;
+    canvas.height = hero.naturalHeight;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Image sampling context unavailable.');
+    context.drawImage(hero, 0, 0);
+    const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+    const style = getComputedStyle(document.documentElement);
+    const tokens = ['--art-purple', '--art-magenta', '--art-cyan', '--art-yellow']
+      .map(name => style.getPropertyValue(name).trim());
+    const found = tokens.map(token => {
+      const rgb = token.match(/[0-9a-f]{2}/gi)?.map(channel => parseInt(channel, 16));
+      if (!rgb || rgb.length !== 3) throw new Error(`Invalid color token: ${token}`);
+      for (let i = 0; i < pixels.length; i += 4) {
+        if (pixels[i] === rgb[0] && pixels[i + 1] === rgb[1] && pixels[i + 2] === rgb[2] && pixels[i + 3] === 255) return true;
+      }
+      return false;
+    });
+    const featureMarks = Array.from(document.querySelectorAll('.essentials .feature-mark'))
+      .map(mark => getComputedStyle(mark).color);
+    return { tokens, found, featureMarks };
+  });
+  expect(result.tokens).toEqual(['#8a1bff', '#ec2dff', '#00e7e7', '#f1f907']);
+  expect(result.found).toEqual([true, true, true, true]);
+  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)']);
+  await expect(page.locator('.hero-underline')).toHaveCSS('color', 'rgb(236, 45, 255)');
+  await expect(page.locator('.button-primary').first()).toHaveCSS('background-color', 'rgb(0, 231, 231)');
+});
+
 test('desktop and mobile meet automated WCAG AA checks', async ({ page }) => {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
