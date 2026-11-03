@@ -117,7 +117,7 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 .feature-content { flex: 1; }
 .feature-icon { height: 70px; display: flex; align-items: center; margin-bottom: 20px; }
 .feature-icon img { width: 54px; height: 58px; object-fit: contain; }
-.feature-image img, .feature-image video { width: 100%; height: auto; border-radius: 3px; display: block; }
+.feature-image img { width: 100%; height: auto; border-radius: 3px; display: block; }
 .essentials h2 { font-size: 22px; font-weight: 550; letter-spacing: -.035em; line-height: 1.4; margin: 0; }
 .essentials p { font-size: 13px; margin-top: 11px; max-width: 420px; margin-bottom: 0; }
 kbd { font: inherit; color: #e0e3ef; }
