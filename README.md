@@ -19,6 +19,8 @@ Import this directory as a Vercel project. The included configuration selects Vi
 
 The download section links to the latest public Windows executable and its SHA-256 checksum in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
 
+The approximate size beside the download button is maintained in `index.html` for the current release (4,243,456 bytes, or about 4.2 MB). Update it when publishing a release with a different executable size. It is hidden when a custom executable URL is configured.
+
 | Variable | Purpose |
 | --- | --- |
 | `VITE_EZPEN_DOWNLOAD_URL` | Optional public HTTPS URL overriding the Windows executable. |

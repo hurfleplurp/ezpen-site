@@ -62,6 +62,8 @@ test('page loads cleanly, navigation works, and the public download is offered',
   await expect(page).toHaveURL(/#download$/);
   await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
   await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+  await expect(page.locator('#download-size')).toBeVisible();
+  await expect(page.locator('#download-size')).toHaveText(/~4\.2 MB/);
   await expect(page.locator('#download-action a')).toHaveCount(2);
   const brokenImages = await page.locator('img').evaluateAll(images =>
     images.filter(image => !image.complete || image.naturalWidth === 0).map(image => image.src));
@@ -92,6 +94,7 @@ test('default release links work without JavaScript', async ({ browser }) => {
     await page.goto('http://127.0.0.1:4178/');
     await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
     await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+    await expect(page.locator('#download-size')).toHaveText(/~4\.2 MB/);
   } finally {
     await context.close();
   }
@@ -101,6 +104,7 @@ test('configured public download, checksum, release notes and canonical URL are 
   await page.goto('http://127.0.0.1:4179/');
   await expect(page.getByText('Windows release in preparation')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.locator('#download-size')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://downloads.example.com/SHA256SUMS.txt');
   await expect(page.getByRole('link', { name: 'Release notes' })).toHaveAttribute('href', 'https://example.com/releases');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://example.com/');
@@ -111,6 +115,7 @@ test('a custom download does not retain the default checksum', async ({ page }) 
   await page.goto('http://127.0.0.1:4181/');
   await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
   await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveCount(0);
+  await expect(page.locator('#download-size')).toHaveCount(0);
 });
 
 test('download configuration rejects unsafe or malformed links', () => {

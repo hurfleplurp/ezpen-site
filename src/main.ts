@@ -12,6 +12,7 @@ function setupRelease(): void {
   const releasesUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_RELEASES_URL, 'VITE_EZPEN_RELEASES_URL');
   if (downloadUrl) {
     requiredElement<HTMLAnchorElement>('#download-link').href = downloadUrl;
+    requiredElement<HTMLElement>('#download-size').remove();
   }
   const checksumLink = requiredElement<HTMLAnchorElement>('#checksum-link');
   if (checksumUrl) {
