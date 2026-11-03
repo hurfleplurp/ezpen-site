@@ -117,6 +117,37 @@ test('the six pens and three features use real application icons', async ({ page
   await expect(page.locator('#pen-art, [role="tablist"]')).toHaveCount(0);
 });
 
+test('infinite canvas highlight plays the supplied looping APNG', async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const feature = page.locator('.essentials .feature').first();
+  await expect(feature.getByRole('heading', { name: 'Room for everything.' })).toBeVisible();
+  const image = feature.locator('.feature-image img');
+  await expect(image).toHaveAttribute('src', '/screenshots/infinite-canvas.apng');
+  await expect(image).toBeVisible();
+  expect(await image.evaluate(element => element.currentSrc)).toContain('/screenshots/infinite-canvas.apng');
+  const response = await request.get('/screenshots/infinite-canvas.apng');
+  expect(response.ok()).toBe(true);
+  const bytes = await response.body();
+  const animationControl = bytes.indexOf(Buffer.from('acTL'));
+  expect(animationControl).toBeGreaterThan(0);
+  expect(bytes.readUInt32BE(animationControl + 4)).toBe(47);
+  expect(bytes.readUInt32BE(animationControl + 8)).toBe(0);
+  const media = await image.boundingBox();
+  const text = await feature.locator('.feature-content').boundingBox();
+  if (!media || !text) throw new Error('Missing infinite canvas feature layout.');
+  expect(media.x + media.width).toBeLessThan(text.x);
+  await image.scrollIntoViewIfNeeded();
+  const firstFrame = await image.screenshot();
+  await page.waitForTimeout(1500);
+  expect(await image.screenshot()).not.toEqual(firstFrame);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(image).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => image.evaluate(element => element.currentSrc)).toContain('/screenshots/infinite-canvas-poster.png');
+});
+
 test('undo timeline highlight plays the supplied looping APNG in an alternating layout', async ({ page, request }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
