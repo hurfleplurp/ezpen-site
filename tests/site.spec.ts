@@ -69,9 +69,15 @@ test('page loads cleanly, navigation works, and no pretend download is offered',
   expect(errors).toEqual([]);
 });
 
-test('hero reserves space for a real asset without a browser drawing imitation', async ({ page }) => {
+test('hero displays the supplied artwork without a browser drawing imitation', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('img[src*="ezpen-hero.png"]')).toBeVisible();
+  const hero = page.locator('.product-figure img');
+  await expect(hero).toBeVisible();
+  await expect(hero).toHaveAttribute('src', '/ezpen-main.png');
+  await expect(hero).toHaveAttribute('width', '1229');
+  await expect(hero).toHaveAttribute('height', '768');
+  expect(await hero.evaluate(image => ({ width: image.naturalWidth, height: image.naturalHeight })))
+    .toEqual({ width: 1229, height: 768 });
   await expect(page.getByText('Your ezPen capture goes here.')).toHaveCount(0);
   await expect(page.locator('.product-media-placeholder')).toHaveCount(0);
   await expect(page.locator('canvas, .sketch-toolbar, .board-art, #drawing-status')).toHaveCount(0);
@@ -330,7 +336,7 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     await page.goto('/');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await expect(page.locator('img[src*="ezpen-hero.png"]')).toBeVisible();
+    await expect(page.locator('.product-figure img[src="/ezpen-main.png"]')).toBeVisible();
     for (const icon of await page.locator('.pen-shelf img[src^="/icons/"]').all()) {
       await expect(icon).toBeVisible();
     }
