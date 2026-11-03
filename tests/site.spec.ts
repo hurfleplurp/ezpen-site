@@ -52,7 +52,7 @@ test('web logos preserve the complete original silhouette with transparent margi
   }
 });
 
-test('page loads cleanly, navigation works, and no pretend download is offered', async ({ page }) => {
+test('page loads cleanly, navigation works, and the public download is offered', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
@@ -60,9 +60,9 @@ test('page loads cleanly, navigation works, and no pretend download is offered',
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Easyis better.');
   await page.getByRole('link', { name: 'Get ezPen' }).click();
   await expect(page).toHaveURL(/#download$/);
-  await expect(page.getByText('Windows release in preparation')).toBeVisible();
-  await expect(page.locator('#download-action a')).toHaveCount(0);
-  await expect(page.locator('a[href*="github.com"]')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+  await expect(page.locator('#download-action a')).toHaveCount(2);
   const brokenImages = await page.locator('img').evaluateAll(images =>
     images.filter(image => !image.complete || image.naturalWidth === 0).map(image => image.src));
   expect(brokenImages).toEqual([]);
@@ -85,13 +85,32 @@ test('hero displays the supplied artwork without a browser drawing imitation', a
   await expect(page.getByText('Try a scribble.', { exact: false })).toHaveCount(0);
 });
 
-test('configured public download, release notes and canonical URL are wired', async ({ page }) => {
+test('default release links work without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto('http://127.0.0.1:4178/');
+    await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
+    await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+  } finally {
+    await context.close();
+  }
+});
+
+test('configured public download, checksum, release notes and canonical URL are wired', async ({ page }) => {
   await page.goto('http://127.0.0.1:4179/');
   await expect(page.getByText('Windows release in preparation')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://downloads.example.com/SHA256SUMS.txt');
   await expect(page.getByRole('link', { name: 'Release notes' })).toHaveAttribute('href', 'https://example.com/releases');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://example.com/');
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://example.com/');
+});
+
+test('a custom download does not retain the default checksum', async ({ page }) => {
+  await page.goto('http://127.0.0.1:4181/');
+  await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveCount(0);
 });
 
 test('download configuration rejects unsafe or malformed links', () => {
@@ -416,7 +435,7 @@ test('surfaces remain dark and blue-grey under both system preferences', async (
     expect(await page.locator('html').evaluate(element => getComputedStyle(element).colorScheme)).toBe('dark');
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#14171f');
     await expect(page.locator('.brand img').first()).toHaveAttribute('src', '/brand/ezpen-white.png');
-    for (const selector of ['html', '.release-status']) {
+    for (const selector of ['html']) {
       const channels = await page.locator(selector).evaluate(element => {
         const values = getComputedStyle(element).backgroundColor.match(/\d+/g);
         if (!values) throw new Error('Missing surface colour.');

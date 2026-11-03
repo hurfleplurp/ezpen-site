@@ -8,17 +8,16 @@ function requiredElement<T extends Element>(selector: string): T {
 
 function setupRelease(): void {
   const downloadUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_DOWNLOAD_URL, 'VITE_EZPEN_DOWNLOAD_URL');
+  const checksumUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_CHECKSUM_URL, 'VITE_EZPEN_CHECKSUM_URL');
   const releasesUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_RELEASES_URL, 'VITE_EZPEN_RELEASES_URL');
   if (downloadUrl) {
-    const action = requiredElement<HTMLElement>('#download-action');
-    const link = document.createElement('a');
-    link.className = 'button button-primary';
-    link.href = downloadUrl;
-    link.textContent = 'Download ezPen for Windows ↗';
-    const note = document.createElement('p');
-    note.className = 'download-note';
-    note.textContent = 'One executable. Open it and draw.';
-    action.replaceChildren(link, note);
+    requiredElement<HTMLAnchorElement>('#download-link').href = downloadUrl;
+  }
+  const checksumLink = requiredElement<HTMLAnchorElement>('#checksum-link');
+  if (checksumUrl) {
+    checksumLink.href = checksumUrl;
+  } else if (downloadUrl) {
+    checksumLink.remove();
   }
   if (releasesUrl) {
     const link = document.createElement('a');

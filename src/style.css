@@ -137,8 +137,6 @@ kbd { font: inherit; color: #e0e3ef; }
 .download-loop path { stroke-width: 2.5; }
 .download-subtitle { margin-top: 31px; font-size: 14px; }
 #download-action { margin-top: 28px; }
-.release-status { display: inline-flex; align-items: center; gap: 10px; padding: 13px 19px; border: 1px solid var(--line); border-radius: 3px; font-size: 13px; color: #d0d6e5; background: #1a1e29; }
-.status-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--art-yellow); }
 .download-note { font-size: 11px; margin-top: 12px; }
 .release-link { display: block; width: fit-content; margin: 14px auto 0; font-size: 12px; color: var(--cyan); text-decoration: underline; text-underline-offset: 4px; }
 .system-requirements { margin-top: 25px; font-size: 10px; color: var(--muted); }
@@ -243,7 +241,6 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .download-section h2 { font-size: 74px; }
   .download-loop { top: 79px; left: calc(50% - 6px); width: 175px; max-width: 47%; height: 130px; }
   .download-subtitle { font-size: 12px; margin-top: 28px; max-width: 240px; margin-inline: auto; }
-  .release-status { font-size: 11px; padding-inline: 14px; }
   .download-note { font-size: 10px; }
   .system-requirements { font-size: 9px; }
   .site-footer { flex-wrap: wrap; row-gap: 22px; font-size: 10px; }

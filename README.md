@@ -17,13 +17,12 @@ npm run dev
 
 Import this directory as a Vercel project. The included configuration selects Vite, runs `npm run build`, and serves `dist`. No server or SPA rewrite is required.
 
-The application repository did not have a public packaged release when this site was created. The download section deliberately shows a release-in-preparation state rather than linking visitors to an inaccessible repository or a nonexistent executable.
-
-When a public Windows build is available, add these Vercel environment variables and redeploy:
+The download section links to the latest public Windows executable and its SHA-256 checksum in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_EZPEN_DOWNLOAD_URL` | Public HTTPS URL for the Windows executable. Enables the real download button. |
+| `VITE_EZPEN_DOWNLOAD_URL` | Optional public HTTPS URL overriding the Windows executable. |
+| `VITE_EZPEN_CHECKSUM_URL` | Optional public HTTPS URL for the matching SHA-256 checksum. If the executable is overridden without this, the default checksum link is hidden to avoid mismatching files. |
 | `VITE_EZPEN_RELEASES_URL` | Optional public release-notes page. |
 | `VITE_SITE_URL` | Optional canonical production origin. |
 

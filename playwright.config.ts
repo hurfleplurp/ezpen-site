@@ -10,7 +10,7 @@ export default defineConfig({
       command: 'npm run dev -- --port 4178 --strictPort',
       url: 'http://127.0.0.1:4178',
       reuseExistingServer: false,
-      env: { VITE_EZPEN_DOWNLOAD_URL: '', VITE_EZPEN_RELEASES_URL: '', VITE_SITE_URL: '' },
+      env: { VITE_EZPEN_DOWNLOAD_URL: '', VITE_EZPEN_CHECKSUM_URL: '', VITE_EZPEN_RELEASES_URL: '', VITE_SITE_URL: '' },
     },
     {
       command: 'npm run dev -- --port 4179 --strictPort',
@@ -18,8 +18,20 @@ export default defineConfig({
       reuseExistingServer: false,
       env: {
         VITE_EZPEN_DOWNLOAD_URL: 'https://downloads.example.com/ezPen.exe',
+        VITE_EZPEN_CHECKSUM_URL: 'https://downloads.example.com/SHA256SUMS.txt',
         VITE_EZPEN_RELEASES_URL: 'https://example.com/releases',
         VITE_SITE_URL: 'https://example.com',
+      },
+    },
+    {
+      command: 'npm run dev -- --port 4181 --strictPort',
+      url: 'http://127.0.0.1:4181',
+      reuseExistingServer: false,
+      env: {
+        VITE_EZPEN_DOWNLOAD_URL: 'https://downloads.example.com/ezPen.exe',
+        VITE_EZPEN_CHECKSUM_URL: '',
+        VITE_EZPEN_RELEASES_URL: '',
+        VITE_SITE_URL: '',
       },
     },
   ],
