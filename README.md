@@ -36,7 +36,7 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 - The hero displays the supplied artwork in `public/ezpen-main.png`. There is no browser drawing demo or imitation application UI.
 - To replace the hero asset, place the new file in `public` and update the image inside `.product-figure`, including its descriptive alt text and actual dimensions. The figure styles support responsive images or video without cropping.
 - For a film, use a `<video controls playsinline preload="metadata" poster="/ezpen-hero.webp">` element with the actual source and accessible fallback text in the same figure. Do not autoplay.
-- The infinite-canvas and "Watch it back" features use the supplied looping APNGs unchanged. First-frame stills are shown instead when the visitor prefers reduced motion.
+- The infinite-canvas, "Watch it back", and "Like Glass" features use the supplied looping APNGs unchanged. First-frame stills are shown instead when the visitor prefers reduced motion.
 - The native pen feature uses the supplied `public/screenshots/stylus-feature.png` artwork.
 - The tool shelf and feature illustrations use the actual application icons, not redrawn approximations. The former simulated pen studies and per-pen marketing paragraphs have been removed.
 - `public/icons` contains application icons, including the supplied replacements for Marker, Chalk, and Chalk Marker.

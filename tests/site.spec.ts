@@ -186,6 +186,39 @@ test('undo timeline highlight plays the supplied looping APNG in an alternating 
   await expect.poll(() => image.evaluate(element => element.currentSrc)).toContain('/screenshots/undo-timeline-poster.png');
 });
 
+test('Like Glass highlight plays the supplied looping APNG', async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const feature = page.locator('.feature-passthrough');
+  await expect(feature.getByRole('heading', { name: 'Like Glass', exact: true })).toBeVisible();
+  await expect(feature.locator('p')).toHaveText('Annotate anything on your desktop. Full pass-through with a single keystroke.');
+  const image = feature.locator('img');
+  await expect(image).toHaveAttribute('src', '/screenshots/desktop-passthrough.apng');
+  await expect(image).toBeVisible();
+  expect(await image.evaluate(element => ({ src: element.currentSrc, width: element.naturalWidth, height: element.naturalHeight })))
+    .toMatchObject({ src: expect.stringContaining('/screenshots/desktop-passthrough.apng'), width: 953, height: 528 });
+  const response = await request.get('/screenshots/desktop-passthrough.apng');
+  expect(response.ok()).toBe(true);
+  const bytes = await response.body();
+  const animationControl = bytes.indexOf(Buffer.from('acTL'));
+  expect(animationControl).toBeGreaterThan(0);
+  expect(bytes.readUInt32BE(animationControl + 4)).toBe(264);
+  expect(bytes.readUInt32BE(animationControl + 8)).toBe(0);
+  const media = await image.boundingBox();
+  const text = await feature.locator('.feature-content').boundingBox();
+  if (!media || !text) throw new Error('Missing Like Glass feature layout.');
+  expect(media.x).toBeGreaterThan(text.x + text.width);
+  await image.scrollIntoViewIfNeeded();
+  const firstFrame = await image.screenshot();
+  await page.waitForTimeout(1500);
+  expect(await image.screenshot()).not.toEqual(firstFrame);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(image).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => image.evaluate(element => element.currentSrc)).toContain('/screenshots/desktop-passthrough-poster.png');
+});
+
 test('native pen highlight shows the supplied artwork and requested copy', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
@@ -417,7 +450,7 @@ test('artwork colors are sampled from the hero and used as accents', async ({ pa
   });
   expect(result.tokens).toEqual(['#8a1bff', '#ec2dff', '#00e7e7', '#f1f907']);
   expect(result.found).toEqual([true, true, true, true]);
-  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)', 'rgb(0, 231, 231)']);
+  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)', 'rgb(0, 231, 231)', 'rgb(236, 45, 255)']);
   await expect(page.locator('.hero-underline')).toHaveCSS('color', 'rgb(236, 45, 255)');
   await expect(page.locator('.button-primary').first()).toHaveCSS('background-color', 'rgb(0, 231, 231)');
 });

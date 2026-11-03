@@ -232,7 +232,7 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .essentials .feature-image-left, .essentials .feature-image-right { flex-direction: column; }
   .essentials .feature-image { width: 100%; }
   .essentials article { padding-left: 81px; min-height: 110px; }
-  .essentials .feature-timeline, .essentials .feature-stylus { padding-left: 0; }
+  .essentials .feature-timeline, .essentials .feature-stylus, .essentials .feature-passthrough { padding-left: 0; }
   .feature-icon { position: absolute; left: 0; top: 0; height: 65px; margin: 0; }
   .feature-icon img { width: 53px; height: 60px; }
   .essentials h2 { font-size: 20px; }
