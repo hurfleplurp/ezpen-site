@@ -55,7 +55,7 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 .hero-underline { position: absolute; width: 103%; height: 22px; left: -1%; bottom: -18px; color: var(--art-magenta); }
 .hero-underline path { stroke-width: 6; }
 .nav-callout { position: absolute; top: 90px; right: 0; width: 220px; color: var(--art-cyan); font-size: 20px; pointer-events: none; }
-.nav-callout .handwritten { display: inline-block; transform: rotate(-7deg); }
+.nav-callout .handwritten { display: inline-block; transform: translateX(-22px) rotate(-7deg); }
 .note-arrow { position: absolute; top: -28px; right: 36px; width: 70px; height: 54px; }
 .note-arrow path { stroke-width: 2; }
 .hero-summary { margin-top: 42px; font-size: 17px; }
