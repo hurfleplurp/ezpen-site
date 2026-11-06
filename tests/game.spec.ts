@@ -32,16 +32,16 @@ test('game page and product navigation work without JavaScript', async ({ browse
 test('game page uses the local Proggy font and a light title band', async ({ page }) => {
   await page.goto('/ggezpen.html');
   await page.evaluate(() => document.fonts.ready);
-  expect(await page.evaluate(() => document.fonts.check('16px "Proggy Vector"'))).toBe(true);
+  expect(await page.evaluate(() => document.fonts.check('16px "Proggy Square"'))).toBe(true);
   for (const selector of ['.brand', '.product-nav', '.game-eyebrow', '#game-title', '.game-tagline', '.game-summary', '.game-art-label', '.game-feature-number', '.game-feature-list p', '.site-footer']) {
-    await expect(page.locator(selector).first()).toHaveCSS('font-family', /Proggy Vector/);
+    await expect(page.locator(selector).first()).toHaveCSS('font-family', /^"Proggy Square"/);
   }
   await expect(page.locator('.site-header .brand img')).toHaveAttribute('src', '/brand/ezpen.png');
   await expect(page.locator('.site-footer .brand img')).toHaveAttribute('src', '/brand/ezpen-white.png');
   const band = await page.locator('.game-hero').evaluate(element => getComputedStyle(element, '::before').backgroundColor);
-  expect(band).toBe('rgb(197, 197, 199)');
+  expect(band).toBe('rgb(170, 169, 173)');
   await expect(page.locator('#game-title')).toHaveCSS('color', 'rgb(23, 19, 34)');
-  const response = await page.request.get('/fonts/ProggyVector-Regular.woff2');
+  const response = await page.request.get('/fonts/ProggySquare.ttf');
   expect(response.ok()).toBe(true);
 });
 
@@ -89,6 +89,21 @@ for (const width of [320, 390, 768, 1440]) {
     const captureArrow = await page.locator('.capture-note svg').boundingBox();
     if (!captureText || !captureArrow) throw new Error('Missing artwork callout.');
     expect(captureArrow.x - (captureText.x + captureText.width)).toBeGreaterThanOrEqual(12);
+    const artwork = await page.locator('.product-figure > img').boundingBox();
+    if (!artwork) throw new Error('Missing hero artwork.');
+    const arrowTip = await page.locator('.capture-note path').evaluate(path => {
+      const svg = path.ownerSVGElement;
+      if (!svg) throw new Error('Missing arrow SVG.');
+      const point = svg.createSVGPoint();
+      point.x = 61;
+      point.y = 37;
+      const matrix = svg.getScreenCTM();
+      if (!matrix) throw new Error('Missing arrow transform.');
+      return point.matrixTransform(matrix).x;
+    });
+    expect(arrowTip).toBeGreaterThan(artwork.x + artwork.width * .4);
+    expect(arrowTip).toBeLessThan(artwork.x + artwork.width * .9);
+    expect(captureText.x).toBeGreaterThanOrEqual(0);
     if (width <= 520) {
       expect(text.y + text.height / 2).toBeLessThan(arrow.y + arrow.height * 83 / 100);
       expect(captureText.y + captureText.height / 2).toBeLessThan(captureArrow.y);
