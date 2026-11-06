@@ -45,6 +45,19 @@ test('game page uses the local Proggy font and a light title band', async ({ pag
   expect(response.ok()).toBe(true);
 });
 
+test('all game text uses whole multiples of the Proggy Square pixel size', async ({ page }) => {
+  for (const width of [320, 390, 520, 521, 760, 761, 1000, 1099, 1100, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/ggezpen.html');
+    const invalid = await page.evaluate(() => Array.from(document.body.querySelectorAll('*'))
+      .filter(element => Array.from(element.childNodes).some(node => node.nodeType === Node.TEXT_NODE && node.textContent?.trim()))
+      .map(element => ({ element: element.tagName + (element.className ? `.${element.className}` : ''), size: parseFloat(getComputedStyle(element).fontSize) }))
+      .filter(({ size }) => size % 16 !== 0));
+    expect(invalid, `Invalid font sizes at ${width}px`).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth), `Overflow at ${width}px`).toBeLessThanOrEqual(width);
+  }
+});
+
 test('supported browsers flip in opposite directions between products', async ({ page }) => {
   await page.addInitScript(() => {
     addEventListener('pagereveal', event => {
