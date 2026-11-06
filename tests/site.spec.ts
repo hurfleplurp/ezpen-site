@@ -56,7 +56,8 @@ test('page loads cleanly, navigation works, and the public download is offered',
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/');
-  await expect(page).toHaveTitle(/ezPen/);
+  await expect(page).toHaveTitle('ezPen - the Best Infinite Canvas');
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'ezPen - the Best Infinite Canvas');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Easyis better.');
   await page.getByRole('link', { name: 'Get ezPen' }).click();
   await expect(page).toHaveURL(/#download$/);
