@@ -54,9 +54,9 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 .marked-word { position: relative; display: inline-block; }
 .hero-underline { position: absolute; width: 103%; height: 22px; left: -1%; bottom: -18px; color: var(--art-magenta); }
 .hero-underline path { stroke-width: 6; }
-.nav-callout { position: absolute; top: 90px; right: 0; width: 220px; color: var(--art-cyan); font-size: 20px; pointer-events: none; }
-.nav-callout .handwritten { display: inline-block; transform: translateX(-22px) rotate(-7deg); }
-.note-arrow { position: absolute; top: -28px; right: 36px; width: 70px; height: 54px; }
+.nav-callout { position: absolute; top: 160px; right: 0; width: 290px; color: var(--art-cyan); font-size: 20px; pointer-events: none; }
+.nav-callout .handwritten { display: inline-block; transform: rotate(-7deg); }
+.note-arrow { position: absolute; top: -80px; right: 36px; width: 100px; height: 76px; }
 .note-arrow path { stroke-width: 2; }
 .hero-summary { margin-top: 42px; font-size: 17px; }
 .hero-actions { display: flex; align-items: center; gap: 25px; margin-top: 26px; }
@@ -66,7 +66,7 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 .button span { font-size: 19px; font-weight: 400; }
 .hero-promise { font-size: 12px; color: var(--muted); }
 .product-figure { position: relative; margin-top: 95px; }
-.capture-note { position: absolute; top: -50px; right: 35px; display: flex; align-items: center; font-size: 16px; color: var(--violet); transform: rotate(3deg); }
+.capture-note { position: absolute; top: -50px; right: 35px; display: flex; align-items: center; gap: 30px; font-size: 16px; color: var(--violet); transform: rotate(3deg); }
 .capture-note svg { width: 67px; height: 45px; margin-top: 20px; }
 .capture-note path { stroke-width: 2; }
 .product-media-placeholder { position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 19px; width: 100%; aspect-ratio: 16 / 8; background: #10131b80; border: 1px dashed #454d61; border-radius: 3px; }
@@ -170,14 +170,14 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .site-header nav { gap: 24px; font-size: 12px; }
   .hero { padding-top: 45px; }
   h1 { font-size: clamp(57px, 10.7vw, 80px); }
-  .nav-callout { top: 80px; width: 168px; font-size: 14px; }
-  .note-arrow { top: -27px; right: 30px; width: 55px; height: 45px; }
+  .nav-callout { top: 139px; width: 220px; font-size: 14px; }
+  .note-arrow { top: -70px; right: 30px; width: 76px; height: 59px; }
   .hero-summary { font-size: 15px; }
   .hero-actions { align-items: flex-start; flex-direction: column; gap: 16px; }
   .hero-promise { font-size: 11px; }
   .product-figure { margin-top: 85px; }
   .product-media-placeholder { min-height: 235px; }
-  .capture-note { font-size: 13px; right: 10px; }
+  .capture-note { gap: 18px; font-size: 13px; right: 10px; }
   .tools-section { padding-top: 70px; }
   .tools-heading h2 { font-size: 33px; }
   .tools-heading h2 .handwritten { font-size: 28px; }
