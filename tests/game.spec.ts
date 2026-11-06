@@ -29,6 +29,22 @@ test('game page and product navigation work without JavaScript', async ({ browse
   }
 });
 
+test('game page uses the local Proggy font and a light title band', async ({ page }) => {
+  await page.goto('/ggezpen.html');
+  await page.evaluate(() => document.fonts.ready);
+  expect(await page.evaluate(() => document.fonts.check('16px "Proggy Vector"'))).toBe(true);
+  for (const selector of ['.brand', '.product-nav', '.game-eyebrow', '#game-title', '.game-tagline', '.game-summary', '.game-art-label', '.game-feature-number', '.game-feature-list p', '.site-footer']) {
+    await expect(page.locator(selector).first()).toHaveCSS('font-family', /Proggy Vector/);
+  }
+  await expect(page.locator('.site-header .brand img')).toHaveAttribute('src', '/brand/ezpen.png');
+  await expect(page.locator('.site-footer .brand img')).toHaveAttribute('src', '/brand/ezpen-white.png');
+  const band = await page.locator('.game-hero').evaluate(element => getComputedStyle(element, '::before').backgroundColor);
+  expect(band).toBe('rgb(197, 197, 199)');
+  await expect(page.locator('#game-title')).toHaveCSS('color', 'rgb(23, 19, 34)');
+  const response = await page.request.get('/fonts/ProggyVector-Regular.woff2');
+  expect(response.ok()).toBe(true);
+});
+
 test('supported browsers flip in opposite directions between products', async ({ page }) => {
   await page.addInitScript(() => {
     addEventListener('pagereveal', event => {
@@ -100,7 +116,10 @@ test('reduced motion disables the page flip', async ({ page }) => {
 });
 
 test('game page meets automated WCAG AA checks', async ({ page }) => {
-  await page.goto('/ggezpen.html');
-  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
-  expect(results.violations).toEqual([]);
+  for (const width of [320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/ggezpen.html');
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    expect(results.violations).toEqual([]);
+  }
 });
