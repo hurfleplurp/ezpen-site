@@ -73,6 +73,10 @@ for (const width of [320, 390, 768, 1440]) {
     const captureArrow = await page.locator('.capture-note svg').boundingBox();
     if (!captureText || !captureArrow) throw new Error('Missing artwork callout.');
     expect(captureArrow.x - (captureText.x + captureText.width)).toBeGreaterThanOrEqual(12);
+    if (width <= 520) {
+      expect(text.y + text.height / 2).toBeLessThan(arrow.y + arrow.height * 83 / 100);
+      expect(captureText.y + captureText.height / 2).toBeLessThan(captureArrow.y);
+    }
     await page.getByRole('link', { name: 'ggezPen' }).click();
     await expect(page).toHaveURL(/\/ggezpen\.html$/);
   });

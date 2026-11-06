@@ -198,6 +198,7 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
 @media (max-width: 520px) {
   .brand img { width: 50px; height: 37px; }
   .brand > span { font-size: 25px; }
+  .nav-callout .handwritten { transform: translateY(-40px) rotate(-7deg); }
   .hero { padding-top: 36px; }
   .eyebrow { font-size: 8px; letter-spacing: .11em; }
   .hero-heading { margin-top: 26px; }
@@ -211,6 +212,7 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
   .product-media-placeholder img { width: 85px; height: auto; }
   .product-media-placeholder p { font-size: 10px; }
   .capture-note { font-size: 12px; top: -47px; right: 3px; }
+  .capture-note span { transform: translateY(-22px); }
   .tools-heading { display: block; }
   .tools-heading h2 { font-size: 34px; }
   .tools-heading h2 br { display: none; }
