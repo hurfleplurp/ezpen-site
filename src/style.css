@@ -335,6 +335,11 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
 .game-outro h2 span { color: var(--art-yellow); }
 .game-outro > p:not(.game-eyebrow) { margin-top: 20px; font-size: 32px; }
 .game-back { border-color: var(--art-magenta); }
+.game-download { margin-top: 28px; }
+.game-download .button, .game-download .button span, .game-download-note, .game-download-links { font-size: 16px; }
+.game-download-note { margin-top: 12px; }
+.game-download-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 24px; margin-top: 16px; color: var(--muted); }
+.game-download-links a:hover { color: var(--art-cyan); }
 
 @media (max-width: 760px) {
   .game-hero { grid-template-columns: minmax(0, 1fr); padding-bottom: 70px; }

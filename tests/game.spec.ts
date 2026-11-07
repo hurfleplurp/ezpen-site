@@ -8,7 +8,7 @@ test('product links navigate between pages and support history', async ({ page }
   await expect(page).toHaveURL(/\/ggezpen\.html$/);
   await expect(page.getByRole('heading', { name: 'ggezPen.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'ggezPen', exact: true })).toHaveAttribute('aria-current', 'page');
-  await expect(page.getByText('ggezPen is a prototype in development. More to come.')).toBeVisible();
+  await expect(page.getByText('Leaderboard coming soon. Ranked play to follow.')).toBeVisible();
   await page.getByRole('link', { name: 'ezPen', exact: true }).click();
   await expect(page).toHaveURL('http://127.0.0.1:4178/');
   await expect(page.getByRole('heading', { name: 'Easy is better.' })).toBeVisible();
@@ -22,6 +22,14 @@ test('game page and product navigation work without JavaScript', async ({ browse
     const page = await context.newPage();
     await page.goto('http://127.0.0.1:4178/ggezpen.html');
     await expect(page.getByRole('heading', { name: 'ggezPen.' })).toBeVisible();
+    for (const link of await page.getByRole('link', { name: 'Download ggezPen' }).all()) {
+      await expect(link).toHaveAttribute('href', 'https://github.com/hurfleplurp/ggezPen-releases/releases/latest/download/ggezPen.exe');
+    }
+    await expect(page.getByRole('link', { name: 'Chart generator' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ggezPen-releases/releases/latest/download/ggezPenGenerate.exe');
+    await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ggezPen-releases/releases/latest/download/SHA256SUMS.txt');
+    await expect(page.locator('.game-download-note')).toHaveCount(2);
+    await expect(page.locator('.game-download-note').first()).toContainText('Free');
+    await expect(page.getByText(/prototype|in development/i)).toHaveCount(0);
     await page.getByRole('link', { name: 'ezPen', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Easy is better.' })).toBeVisible();
   } finally {
