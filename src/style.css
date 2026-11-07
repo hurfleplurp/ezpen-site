@@ -303,7 +303,10 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
 .game-jump, .game-back { display: inline-flex; gap: 26px; align-items: center; margin-top: 32px; padding-bottom: 8px; border-bottom: 1px solid var(--art-cyan); font-size: 16px; font-weight: 600; }
 .game-jump span { color: var(--art-cyan); font-size: 16px; }
 .game-jump:hover, .game-back:hover { color: var(--art-cyan); }
-.game-art { grid-column: 2; grid-row: 1 / 3; align-self: center; position: relative; min-width: 0; }
+.game-visuals { grid-column: 2; grid-row: 1 / 3; min-width: 0; padding-top: 120px; }
+.game-art { position: relative; width: min(100%, 440px); margin-inline: auto; }
+.game-footage { display: block; margin-top: 24px; }
+.game-footage img { display: block; width: 100%; height: auto; border: 1px solid #39304c; border-radius: 3px; }
 .game-art svg { width: 100%; height: auto; overflow: visible; }
 .game-art-grid { stroke: #8178a5; stroke-width: 1; opacity: .13; }
 .game-art-orbit { stroke: #b19dff; stroke-width: 1; opacity: .25; stroke-dasharray: 4 9; }
@@ -336,7 +339,7 @@ code { font-size: 11px; overflow-wrap: anywhere; color: #d5daed; }
 @media (max-width: 760px) {
   .game-hero { grid-template-columns: minmax(0, 1fr); padding-bottom: 70px; }
   .game-title-block { padding-top: 55px; }
-  .game-art { grid-column: 1; grid-row: 3; width: min(100%, 560px); margin: 15px auto 0; }
+  .game-visuals { grid-column: 1; grid-row: 3; width: min(100%, 560px); margin: 15px auto 0; padding-top: 0; }
   .game-art-label-top { color: #b7a4d5; }
   .game-features { grid-template-columns: 1fr; gap: 45px; padding-block: 70px; }
 }

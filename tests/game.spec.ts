@@ -58,6 +58,51 @@ test('all game text uses whole multiples of the Proggy Square pixel size', async
   }
 });
 
+test('gameplay loop sits below the ribbon and plays the supplied footage', async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/ggezpen.html');
+  const image = page.locator('.game-footage img');
+  await expect(image).toBeVisible();
+  await expect(image).toHaveAttribute('src', '/screenshots/ggezpen-gameplay.apng');
+  const response = await request.get('/screenshots/ggezpen-gameplay.apng');
+  expect(response.ok()).toBe(true);
+  const bytes = await response.body();
+  const animationControl = bytes.indexOf(Buffer.from('acTL'));
+  expect(animationControl).toBeGreaterThan(0);
+  expect(bytes.readUInt32BE(animationControl + 4)).toBe(307);
+  expect(bytes.readUInt32BE(animationControl + 8)).toBe(0);
+  expect(await image.evaluate(element => ({ width: element.naturalWidth, height: element.naturalHeight })))
+    .toEqual({ width: 799, height: 453 });
+  const firstFrame = await image.screenshot();
+  await page.waitForTimeout(1500);
+  expect(await image.screenshot()).not.toEqual(firstFrame);
+  for (const width of [320, 390, 760, 761, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const footage = await image.boundingBox();
+    const art = await page.locator('.game-art').boundingBox();
+    const intro = await page.locator('.game-intro').boundingBox();
+    const features = await page.locator('.game-features').boundingBox();
+    if (!footage || !art || !intro || !features) throw new Error('Missing gameplay hero layout.');
+    expect(footage.y).toBeGreaterThanOrEqual(art.y + art.height + 20);
+    expect(footage.y + footage.height).toBeLessThan(features.y);
+    expect(footage.width / footage.height).toBeCloseTo(799 / 453, 1);
+    if (width > 760) {
+      expect(footage.x).toBeGreaterThanOrEqual(intro.x + intro.width);
+    } else {
+      expect(art.y).toBeGreaterThanOrEqual(intro.y + intro.height);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => image.evaluate(element => element.currentSrc)).toContain('/screenshots/ggezpen-gameplay-poster.png');
+  const poster = await request.get('/screenshots/ggezpen-gameplay-poster.png');
+  expect(poster.ok()).toBe(true);
+  expect((await poster.body()).indexOf(Buffer.from('acTL'))).toBe(-1);
+  const still = await image.screenshot();
+  await page.waitForTimeout(500);
+  expect(await image.screenshot()).toEqual(still);
+});
+
 test('supported browsers flip in opposite directions between products', async ({ page }) => {
   await page.addInitScript(() => {
     addEventListener('pagereveal', event => {
