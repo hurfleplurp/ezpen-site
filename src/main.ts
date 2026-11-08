@@ -1,4 +1,5 @@
 import { publicHttpsUrl } from './urls';
+import './navigation';
 
 function requiredElement<T extends Element>(selector: string): T {
   const element = document.querySelector<T>(selector);

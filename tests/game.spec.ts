@@ -111,23 +111,17 @@ test('gameplay loop sits below the ribbon and plays the supplied footage', async
   expect(await image.screenshot()).toEqual(still);
 });
 
-test('supported browsers flip in opposite directions between products', async ({ page }) => {
+test('pages rotate in opposite directions between products', async ({ page }) => {
   await page.addInitScript(() => {
-    addEventListener('pagereveal', event => {
-      const transition = (event as Event & { viewTransition?: { finished: Promise<void> } }).viewTransition;
-      if (!transition) return;
-      document.documentElement.dataset.flipOld = getComputedStyle(document.documentElement, '::view-transition-old(root)').animationName;
-      document.documentElement.dataset.flipNew = getComputedStyle(document.documentElement, '::view-transition-new(root)').animationName;
-      void transition.finished.then(() => { document.documentElement.dataset.flipFinished = 'true'; });
+    addEventListener('animationstart', event => {
+      if (event.target === document.body) document.documentElement.dataset.flipNew = event.animationName;
     });
   });
   await page.goto('/');
   await page.getByRole('link', { name: 'ggezPen' }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-flip-old', 'flip-out-left');
   await expect(page.locator('html')).toHaveAttribute('data-flip-new', 'flip-in-right');
-  await expect(page.locator('html')).toHaveAttribute('data-flip-finished', 'true');
+  await expect(page.locator('body')).not.toHaveClass(/page-enter/);
   await page.getByRole('link', { name: 'ezPen', exact: true }).click();
-  await expect(page.locator('html')).toHaveAttribute('data-flip-old', 'flip-out-right');
   await expect(page.locator('html')).toHaveAttribute('data-flip-new', 'flip-in-left');
 });
 
@@ -192,7 +186,7 @@ test('reduced motion disables the page flip', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('link', { name: 'ggezPen' }).click();
   await expect(page.getByRole('heading', { name: 'ggezPen.' })).toBeVisible();
-  const duration = await page.evaluate(() => getComputedStyle(document.documentElement, '::view-transition-new(root)').animationDuration);
+  const duration = await page.evaluate(() => getComputedStyle(document.body).animationDuration);
   expect(duration).toBe('0s');
 });
 

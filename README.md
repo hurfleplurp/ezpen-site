@@ -19,6 +19,10 @@ Import this directory as a Vercel project. The included configuration selects Vi
 
 ## Windows Server / Caddy
 
+Production product navigation uses `https://ezpen.ink/` and `https://gg.ezpen.ink/`. Vite's build-only `product-domain-links` plugin writes those absolute links; development retains local page links. Caddy serves the game page at the `gg` root and proxies its relative leaderboard/API routes to the existing backend.
+
+The page rotation uses explicit JavaScript exit/entry CSS animations, including across the two origins, rather than browser-native cross-document View Transitions. It honours reduced motion and modifier-clicks, and ordinary links remain usable without JavaScript. The game also remains accessible at `/ggezpen.html` on the root domain.
+
 Build locally with `npm ci` and `npm run build`, then upload the contents of `dist` to a new directory under `C:\Sites\ezpen\releases`. Node.js is not required on the server.
 
 Caddy serves the static files without URL rewriting. Preserve the security headers in `vercel.json`, and explicitly serve `.apng` files as `image/apng`. Store Caddy's executable and configuration under `C:\Sites\ezpen\server`. The `ezpen-web` Windows scheduled task starts Caddy at boot and restarts it after failure; its certificate storage must persist between deployments.
