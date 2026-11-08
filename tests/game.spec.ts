@@ -8,7 +8,7 @@ test('product links navigate between pages and support history', async ({ page }
   await expect(page).toHaveURL(/\/ggezpen\.html$/);
   await expect(page.getByRole('heading', { name: 'ggezPen.' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'ggezPen', exact: true })).toHaveAttribute('aria-current', 'page');
-  await expect(page.getByText('Leaderboard coming soon. Ranked play to follow.')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Leaderboard is live' })).toHaveAttribute('href', '/leaderboard');
   await page.getByRole('link', { name: 'ezPen', exact: true }).click();
   await expect(page).toHaveURL('http://127.0.0.1:4178/');
   await expect(page.getByRole('heading', { name: 'Easy is better.' })).toBeVisible();

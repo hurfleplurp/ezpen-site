@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ggezPen leaderboard - Privacy and recovery</title>
+    <style>
+      body { background: #0c0b16; color: #f0f0f3; font: 16px/1.7 system-ui, sans-serif; max-width: 760px; margin: 40px auto; padding: 24px; }
+      a { color: #60d9ed; }
+    </style>
+  </head>
+  <body>
+    <h1>Leaderboard privacy and recovery</h1>
+    <p>Online play is optional. Offline play does not require registration or leaderboard uploads.</p>
+    <h2>What is stored</h2>
+    <p>The service stores your chosen public handle, a hashed Windows-installation fingerprint, a hash of an automatically generated installation credential, and your best replay and score for each official chart. Replays contain timing, positions, pressure, device flags and calibration, not music or local file paths. Your raw Windows MachineGuid and private credential are not stored on the server.</p>
+    <p>Public boards show handles, scores, accuracy, maximum combo and submission times. Server-scored means the replay matches the scoring rules, not that a human played it or that the player has a verified identity.</p>
+    <h2>Retention and moderation</h2>
+    <p>Best scores and reserved handles remain until operator deletion or moderation. There is no automatic inactivity deletion. Turning Online off stops new submissions but does not erase existing records. Private database backups rotate across the latest 14 snapshots; deleted data may remain in those backups until they rotate out. These backups are currently on the same server, not an off-site disaster-recovery copy.</p>
+    <h2>Recovery and deletion</h2>
+    <p>Keep your local online identity file: losing it does not automatically release your handle. Knowing a public handle alone is not proof of ownership. For recovery, deletion or moderation requests, <a href="https://github.com/hurfleplurp/ggezPen-releases/issues">contact the operator through the release repository</a>. Do not post private credentials, identity files, machine fingerprints or other personal information in a public issue. Recovery requires private ownership verification and is not guaranteed.</p>
+    <p><a href="/leaderboard">Leaderboard</a> · <a href="/ggezpen.html">Back to ggezPen</a></p>
+  </body>
+</html>
