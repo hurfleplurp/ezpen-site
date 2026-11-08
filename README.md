@@ -17,6 +17,16 @@ npm run dev
 
 Import this directory as a Vercel project. The included configuration selects Vite, runs `npm run build`, and serves `dist`. No server or SPA rewrite is required. The Vite multi-page build includes both the ezPen home page and `ggezpen.html`; product navigation uses ordinary links, so both pages work directly and without JavaScript.
 
+## Windows Server / Caddy
+
+Build locally with `npm ci` and `npm run build`, then upload the contents of `dist` to a new directory under `C:\Sites\ezpen\releases`. Node.js is not required on the server.
+
+Caddy serves the static files without URL rewriting. Preserve the security headers in `vercel.json`, and explicitly serve `.apng` files as `image/apng`. Store Caddy's executable and configuration under `C:\Sites\ezpen\server`. The `ezpen-web` Windows scheduled task starts Caddy at boot and restarts it after failure; its certificate storage must persist between deployments.
+
+Stage each update in a new release directory and update the Caddyfile's root only after validating the upload. Validate with `caddy validate`, then apply with `caddy reload`; keep the previous release for rollback. Verify both pages, animation and font requests, and download links before changing DNS. Point the domain's A record to the server and remove conflicting A/AAAA records; enable the domain's HTTPS site in Caddy and verify certificate issuance before considering the migration complete. Leave Vercel available until cutover is verified.
+
+## Download configuration
+
 The download section links to the latest public Windows executable and its SHA-256 checksum in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
 
 The approximate size beside the download button is maintained in `index.html` for the current release (4,243,456 bytes, or about 4.2 MB). Update it when publishing a release with a different executable size. It is hidden when a custom executable URL is configured.
