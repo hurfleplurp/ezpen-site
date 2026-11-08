@@ -53,6 +53,23 @@ test('game page uses the local Proggy font and a light title band', async ({ pag
   expect(response.ok()).toBe(true);
 });
 
+test('leaderboard tab sits on the title band boundary and links to the live board', async ({ page }) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/ggezpen.html');
+    const tab = page.getByRole('link', { name: 'LEADERBOARD', exact: true });
+    await expect(tab).toBeVisible();
+    await expect(tab).toHaveAttribute('href', '/leaderboard');
+    const bounds = await tab.boundingBox();
+    const title = await page.locator('.game-title-block').boundingBox();
+    if (!bounds || !title) throw new Error('Missing leaderboard tab layout.');
+    expect(bounds.x).toBeGreaterThanOrEqual(0);
+    expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
+    expect(bounds.y).toBeLessThan(title.y + title.height);
+    expect(bounds.y + bounds.height).toBeGreaterThan(title.y + title.height);
+  }
+});
+
 test('all game text uses whole multiples of the Proggy Square pixel size', async ({ page }) => {
   for (const width of [320, 390, 520, 521, 760, 761, 1000, 1099, 1100, 1440, 1920]) {
     await page.setViewportSize({ width, height: 900 });
