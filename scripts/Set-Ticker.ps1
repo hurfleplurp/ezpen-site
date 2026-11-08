@@ -40,7 +40,13 @@ try {
     $invoke = "process.argv=[process.execPath,process.env.GGEZPEN_TICKER_SCRIPT,process.env.GGEZPEN_TICKER_COMMAND];if(process.env.GGEZPEN_TICKER_COMMAND==='announce')process.argv.push(process.env.GGEZPEN_TICKER_MESSAGE);import(require('node:url').pathToFileURL(process.argv[1]).href)"
     & $NodePath -e $invoke
     if ($LASTEXITCODE -ne 0) { throw 'Ticker database update failed.' }
-    $response = Invoke-WebRequest 'http://127.0.0.1:8787/v1/announcements' -UseBasicParsing
+    $latest = Invoke-WebRequest 'http://127.0.0.1:8787/v1/latest-version' -UseBasicParsing
+    if ($latest.StatusCode -ne 200) { throw 'Cannot verify current latest release.' }
+    $noticeUrl = 'http://127.0.0.1:8787/v1/announcements'
+    if ($latest.Content) {
+        $noticeUrl += '?version=' + [Uri]::EscapeDataString($latest.Content)
+    }
+    $response = Invoke-WebRequest $noticeUrl -UseBasicParsing
     if ($response.StatusCode -ne 200 -or $response.Headers['Content-Type'] -notlike 'text/plain*' -or $response.Content -cne $expected) {
         throw 'Ticker was written, but live delivery verification failed. Check the backend before retrying.'
     }

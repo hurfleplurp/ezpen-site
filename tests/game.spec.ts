@@ -23,10 +23,10 @@ test('game page and product navigation work without JavaScript', async ({ browse
     await page.goto('http://127.0.0.1:4178/ggezpen.html');
     await expect(page.getByRole('heading', { name: 'ggezPen.' })).toBeVisible();
     for (const link of await page.getByRole('link', { name: 'Download ggezPen' }).all()) {
-      await expect(link).toHaveAttribute('href', 'https://github.com/hurfleplurp/ggezPen-releases/releases/latest/download/ggezPen.exe');
+      await expect(link).toHaveAttribute('href', '/downloads/ggezpen/ggezPen.exe');
     }
-    await expect(page.getByRole('link', { name: 'Chart generator' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ggezPen-releases/releases/latest/download/ggezPenGenerate.exe');
-    await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ggezPen-releases/releases/latest/download/SHA256SUMS.txt');
+    await expect(page.getByRole('link', { name: 'Chart generator' })).toHaveAttribute('href', '/downloads/ggezpen/ggezPenGenerate.exe');
+    await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', '/downloads/ggezpen/SHA256SUMS.txt');
     await expect(page.locator('.game-download-note')).toHaveCount(2);
     await expect(page.locator('.game-download-note').first()).toContainText('Free');
     await expect(page.getByText(/prototype|in development/i)).toHaveCount(0);
