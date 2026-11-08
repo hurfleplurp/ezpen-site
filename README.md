@@ -33,6 +33,19 @@ Code/runtime are under `C:\Sites\ggezpen-leaderboard\releases` and `runtime`; SQ
 
 The `ggezpen-leaderboard-backup` daily task uses SQLite `VACUUM INTO` for consistent snapshots, retaining the latest 14 in `backups`. These are same-server recovery copies: configure off-site backups separately. Backend errors are in `logs\server.log`. Keep native scoring version 1 aligned with the game; only the six pinned official charts are approved. Server-scored replays are not proof of human play. Public retention/recovery information is in `public/leaderboard-privacy.html`.
 
+### Client ticker notices
+
+The anonymous `GET https://ezpen.ink/v1/announcements` returns the current notice as uncached UTF-8 plain text. Clients poll on launch and every 60 seconds, even with Online disabled. Empty responses hide the ticker. Notices persist in SQLite; no service restart is required. Public writes are not supported.
+
+The operator helper `scripts\Set-Ticker.ps1` is installed on the VPS at `C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1`. Run it in an administrator PowerShell session (including over SSH):
+
+```powershell
+& C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Message 'Leaderboards are live! Ranked play is coming later.'
+& C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Clear
+```
+
+It accepts at most 512 printable ASCII characters, preserves spaces/quotes, validates the existing database path, and verifies delivery from the running backend. Backend failures are reported explicitly. Override `-ServerScript` when moving the backend to a new release. Never send private credentials or identities in a public ticker notice.
+
 ## Download configuration
 
 The download section links to the latest public Windows executable and its SHA-256 checksum in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
