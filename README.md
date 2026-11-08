@@ -68,7 +68,7 @@ It accepts at most 512 printable ASCII characters, preserves spaces/quotes, vali
 
 ## Download configuration
 
-ggezPen v0.3.3 downloads are mirrored on the same origin under
+ggezPen v0.3.4 downloads are mirrored on the same origin under
 `/downloads/ggezpen/`, avoiding GitHub asset gateway outages. When staging a
 production build (including Vercel), copy the four hash-verified public release
 assets (`ggezPen.exe`, `ggezPenGenerate.exe`, `GGEZPEN-OVERVIEW.md`,
@@ -92,7 +92,7 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 
 ## Visuals and product copy
 
-- ggezPen has its own companion page at `/ggezpen.html`, with a grey header and title area above a darker, colourful page. Its locally hosted Proggy Square font matches the game; use font sizes that are whole multiples of 16px, its native glyph-grid size. Proggy Vector supplies symbols missing from Square. Both fonts and their licenses come from the official `bluescan/proggyfonts` project. Its ribbon artwork is decorative, not a gameplay capture. Download links use same-origin mirrors of the public release in `hurfleplurp/ggezPen-releases`, including the optional chart generator and checksums. The approximate game download size is maintained in `ggezpen.html` (7,603,712 bytes, about 7.6 MB). Leaderboards are live on the VPS, with ranked play to follow. Both applications are labelled free beside their download actions. Supporting browsers animate navigation between the two pages with a vertical-axis flip; other browsers and visitors who prefer reduced motion get normal navigation.
+- ggezPen has its own companion page at `/ggezpen.html`, with a grey header and title area above a darker, colourful page. Its locally hosted Proggy Square font matches the game; use font sizes that are whole multiples of 16px, its native glyph-grid size. Proggy Vector supplies symbols missing from Square. Both fonts and their licenses come from the official `bluescan/proggyfonts` project. Its ribbon artwork is decorative, not a gameplay capture. Download links use same-origin mirrors of the public release in `hurfleplurp/ggezPen-releases`, including the optional chart generator and checksums. The approximate game download size is maintained in `ggezpen.html` (7,637,504 bytes, about 7.6 MB). Leaderboards are live on the VPS, with ranked play to follow. Both applications are labelled free beside their download actions. Supporting browsers animate navigation between the two pages with a vertical-axis flip; other browsers and visitors who prefer reduced motion get normal navigation.
 - A concise chalkboard-inspired page: blue-black grain, chalk-white type, handwritten notes, and marker strokes. Four `--art-*` accent tokens in `src/style.css` are sampled directly from `public/ezpen-main.png`: purple `#8a1bff`, magenta `#ec2dff`, cyan `#00e7e7`, and yellow `#f1f907`. The original softer accents remain available for other text and details. The site stays dark under both system preferences and uses local system fonts, with no external font requests.
 - Optimised supplied logo derivatives live in `public/brand`; originals are untouched in `Logos`. Both derivatives preserve the full nontransparent artwork bounds with transparent padding, including the complete bottom flourish. Do not crop using assumed source-image dimensions. A regression test compares their silhouettes against the originals.
 - The hero displays the supplied artwork in `public/ezpen-main.png`. There is no browser drawing demo or imitation application UI.
