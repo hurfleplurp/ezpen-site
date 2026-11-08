@@ -60,6 +60,11 @@ test('leaderboard tab sits on the title band boundary and links to the live boar
     const tab = page.getByRole('link', { name: 'LEADERBOARD', exact: true });
     await expect(tab).toBeVisible();
     await expect(tab).toHaveAttribute('href', '/leaderboard');
+    await expect(tab.locator('svg')).toHaveCount(0);
+    await page.mouse.move(0, 0);
+    await expect(tab).toHaveCSS('text-shadow', 'none');
+    await tab.hover();
+    await expect(tab).not.toHaveCSS('text-shadow', 'none');
     const bounds = await tab.boundingBox();
     const title = await page.locator('.game-title-block').boundingBox();
     if (!bounds || !title) throw new Error('Missing leaderboard tab layout.');

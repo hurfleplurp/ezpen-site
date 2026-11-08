@@ -39,7 +39,7 @@ The `ggezpen-leaderboard-backup` daily task uses SQLite `VACUUM INTO` for consis
 
 ### Client ticker notices
 
-The game hero has a yellow leaderboard tab on the grey/dark title boundary. It links to `/leaderboard`, served by the existing replay leaderboard backend on both production origins.
+The game hero has a yellow leaderboard tab blending into the dark panel at the grey/dark title boundary, with a text glow on hover or keyboard focus. It links to `/leaderboard`, served by the existing replay leaderboard backend on both production origins.
 
 The anonymous `GET https://ezpen.ink/v1/announcements` returns the current notice as uncached UTF-8 plain text. Clients poll on launch and every 60 seconds, even with Online disabled. Empty responses hide the ticker. Notices persist in SQLite; no service restart is required. Public writes are not supported.
 
