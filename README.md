@@ -50,7 +50,7 @@ The game hero has a yellow leaderboard tab blending into the dark panel at the g
 The anonymous `GET https://ezpen.ink/v1/announcements.rss` returns the same read-only RSS 2.0 feed to every subscriber. Clients poll on launch and every 60 seconds, even with Online disabled, without sending their version or identity. Each item's `ggezpen:maxVersion` (`urn:ggezpen:notices:v1`) targets versions equal or below that number; `*` means everyone. Subscribers filter numerically on the client and display only literal plain-text descriptions. No applicable items hides the ticker. Notices persist in SQLite; no service restart is required. Public writes, automatic actions and downloads are not supported. The old plain-text endpoint remains only for released-client compatibility.
 
 The backend permanently publishes its latest release at `/v1/latest-version`.
-Operators set it after publishing with `node .\server.mjs latest-version 0.3.5`
+Operators set it after publishing with `node .\server.mjs latest-version 0.3.6`
 using the existing backend data environment. Only older versions receive an
 update prompt, in preference to ordinary notices. Current/newer clients remain quiet
 unless an applicable explicit notice is published. **F8** or the ticker close button dismisses
@@ -60,7 +60,7 @@ The operator helper `scripts\Set-Ticker.ps1` is installed on the VPS at `C:\Site
 
 ```powershell
 & C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Message 'Leaderboards are live! Ranked play is coming later.'
-& C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Message 'Please update to the latest version.' -MaxVersion 0.3.4
+& C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Message 'Please update to the latest version.' -MaxVersion 0.3.5
 & C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Clear
 ```
 
@@ -68,7 +68,7 @@ It accepts at most 512 printable ASCII characters, preserves spaces/quotes, vali
 
 ## Download configuration
 
-ggezPen v0.3.5 downloads are mirrored on the same origin under
+ggezPen v0.3.6 downloads are mirrored on the same origin under
 `/downloads/ggezpen/`, avoiding GitHub asset gateway outages. When staging a
 production build (including Vercel), copy the four hash-verified public release
 assets (`ggezPen.exe`, `ggezPenGenerate.exe`, `GGEZPEN-OVERVIEW.md`,
