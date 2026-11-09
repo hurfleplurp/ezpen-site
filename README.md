@@ -47,28 +47,28 @@ The `ggezpen-leaderboard-backup` daily task uses SQLite `VACUUM INTO` for consis
 
 The game hero has a yellow leaderboard tab blending into the dark panel at the grey/dark title boundary, with a text glow on hover or keyboard focus. It links to `/leaderboard`, served by the existing replay leaderboard backend on both production origins.
 
-The anonymous `GET https://ezpen.ink/v1/announcements?version=0.3.2` returns the current notice as uncached UTF-8 plain text. Clients poll on launch and every 60 seconds, even with Online disabled. Empty responses hide the ticker. Notices persist in SQLite; no service restart is required. Public writes are not supported.
+The anonymous `GET https://ezpen.ink/v1/announcements.rss` returns the same read-only RSS 2.0 feed to every subscriber. Clients poll on launch and every 60 seconds, even with Online disabled, without sending their version or identity. Each item's `ggezpen:maxVersion` (`urn:ggezpen:notices:v1`) targets versions equal or below that number; `*` means everyone. Subscribers filter numerically on the client and display only literal plain-text descriptions. No applicable items hides the ticker. Notices persist in SQLite; no service restart is required. Public writes, automatic actions and downloads are not supported. The old plain-text endpoint remains only for released-client compatibility.
 
 The backend permanently publishes its latest release at `/v1/latest-version`.
-Operators set it after publishing with `node .\server.mjs latest-version 0.3.2`
+Operators set it after publishing with `node .\server.mjs latest-version 0.3.5`
 using the existing backend data environment. Only older versions receive an
-update prompt, in preference to ordinary notices. Clients through 0.3.1 omit
-their version and are treated as 0.3.1. Current/newer clients remain quiet
-unless an explicit notice is pushed. **F8** or the ticker close button dismisses
+update prompt, in preference to ordinary notices. Current/newer clients remain quiet
+unless an applicable explicit notice is published. **F8** or the ticker close button dismisses
 the message; identical text remains dismissed across restarts.
 
 The operator helper `scripts\Set-Ticker.ps1` is installed on the VPS at `C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1`. Run it in an administrator PowerShell session (including over SSH):
 
 ```powershell
 & C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Message 'Leaderboards are live! Ranked play is coming later.'
+& C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Message 'Please update to the latest version.' -MaxVersion 0.3.4
 & C:\Sites\ggezpen-leaderboard\Set-Ticker.ps1 -Clear
 ```
 
-It accepts at most 512 printable ASCII characters, preserves spaces/quotes, validates the existing database path, and verifies delivery as a current-version client so update prompts do not interfere. Clearing a notice leaves the latest-version advertisement intact. Backend failures are reported explicitly. Override `-ServerScript` when moving the backend to a new release. Never send private credentials or identities in a public ticker notice.
+It accepts at most 512 printable ASCII characters, preserves spaces/quotes, validates the existing database path, and verifies the explicit item and its version target in the shared RSS feed. Clearing a notice leaves the latest-version advertisement intact. Backend failures are reported explicitly. Override `-ServerScript` when moving the backend to a new release. Never send private credentials or identities in a public ticker notice.
 
 ## Download configuration
 
-ggezPen v0.3.4 downloads are mirrored on the same origin under
+ggezPen v0.3.5 downloads are mirrored on the same origin under
 `/downloads/ggezpen/`, avoiding GitHub asset gateway outages. When staging a
 production build (including Vercel), copy the four hash-verified public release
 assets (`ggezPen.exe`, `ggezPenGenerate.exe`, `GGEZPEN-OVERVIEW.md`,
@@ -92,7 +92,7 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 
 ## Visuals and product copy
 
-- ggezPen has its own companion page at `/ggezpen.html`, with a grey header and title area above a darker, colourful page. Its locally hosted Proggy Square font matches the game; use font sizes that are whole multiples of 16px, its native glyph-grid size. Proggy Vector supplies symbols missing from Square. Both fonts and their licenses come from the official `bluescan/proggyfonts` project. Its ribbon artwork is decorative, not a gameplay capture. Download links use same-origin mirrors of the public release in `hurfleplurp/ggezPen-releases`, including the optional chart generator and checksums. The approximate game download size is maintained in `ggezpen.html` (7,637,504 bytes, about 7.6 MB). Leaderboards are live on the VPS, with ranked play to follow. Both applications are labelled free beside their download actions. Supporting browsers animate navigation between the two pages with a vertical-axis flip; other browsers and visitors who prefer reduced motion get normal navigation.
+- ggezPen has its own companion page at `/ggezpen.html`, with a grey header and title area above a darker, colourful page. Its locally hosted Proggy Square font matches the game; use font sizes that are whole multiples of 16px, its native glyph-grid size. Proggy Vector supplies symbols missing from Square. Both fonts and their licenses come from the official `bluescan/proggyfonts` project. Its ribbon artwork is decorative, not a gameplay capture. Download links use same-origin mirrors of the public release in `hurfleplurp/ggezPen-releases`, including the optional chart generator and checksums. The approximate game download size is maintained in `ggezpen.html` (10,225,744 bytes, about 10.2 MB). Leaderboards are live on the VPS, with ranked play to follow. Both applications are labelled free beside their download actions. Supporting browsers animate navigation between the two pages with a vertical-axis flip; other browsers and visitors who prefer reduced motion get normal navigation.
 - A concise chalkboard-inspired page: blue-black grain, chalk-white type, handwritten notes, and marker strokes. Four `--art-*` accent tokens in `src/style.css` are sampled directly from `public/ezpen-main.png`: purple `#8a1bff`, magenta `#ec2dff`, cyan `#00e7e7`, and yellow `#f1f907`. The original softer accents remain available for other text and details. The site stays dark under both system preferences and uses local system fonts, with no external font requests.
 - Optimised supplied logo derivatives live in `public/brand`; originals are untouched in `Logos`. Both derivatives preserve the full nontransparent artwork bounds with transparent padding, including the complete bottom flourish. Do not crop using assumed source-image dimensions. A regression test compares their silhouettes against the originals.
 - The hero displays the supplied artwork in `public/ezpen-main.png`. There is no browser drawing demo or imitation application UI.
