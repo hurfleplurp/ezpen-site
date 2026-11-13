@@ -6,9 +6,13 @@ export default defineConfig({
     name: 'product-domain-links',
     apply: 'build',
     transformIndexHtml(html, context) {
-      return context.filename.endsWith('ggezpen.html')
-        ? html.replaceAll('href="/"', 'href="https://ezpen.ink/"')
-        : html.replaceAll('href="/ggezpen.html"', 'href="https://gg.ezpen.ink/"');
+      let updated = html
+        .replaceAll('href="/ggezpen.html"', 'href="https://gg.ezpen.ink/"')
+        .replaceAll('href="/leaderboard-privacy.html"', 'href="/leaderboard-privacy"');
+      if (context.filename.endsWith('ggezpen.html')) {
+        updated = updated.replaceAll('href="/"', 'href="https://ezpen.ink/"');
+      }
+      return updated;
     },
   }],
   build: {

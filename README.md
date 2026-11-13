@@ -21,7 +21,7 @@ Import this directory as a Vercel project. The included configuration selects Vi
 
 Production product navigation uses `https://ezpen.ink/` and `https://gg.ezpen.ink/`. Vite's build-only `product-domain-links` plugin writes those absolute links; development retains local page links. Caddy serves the game page at the `gg` root and proxies its relative leaderboard/API routes to the existing backend.
 
-The page rotation uses explicit JavaScript exit/entry CSS animations, including across the two origins, rather than browser-native cross-document View Transitions. It honours reduced motion and modifier-clicks, and ordinary links remain usable without JavaScript. The game also remains accessible at `/ggezpen.html` on the root domain.
+The page rotation uses explicit JavaScript exit/entry CSS animations, including across the two origins, rather than browser-native cross-document View Transitions. It honours reduced motion and modifier-clicks, and ordinary links remain usable without JavaScript. Caddy redirects legacy `.html` and `/ggezpen` paths (`/index.html`, `/ggezpen`, `/ggezpen.html`, `/leaderboard-privacy.html`) cleanly to `https://ezpen.ink/`, `https://gg.ezpen.ink/`, and `/leaderboard-privacy`.
 
 Build locally with `npm ci` and `npm run build`, then upload the contents of `dist` to a new directory under `C:\Sites\ezpen\releases`. Node.js is not required on the server.
 
