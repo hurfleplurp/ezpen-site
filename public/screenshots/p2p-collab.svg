@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" fill="none">
+  <rect width="640" height="400" rx="6" fill="#10131b"/>
+  <rect x="1" y="1" width="638" height="398" rx="5" stroke="#2d3343" stroke-width="1.5"/>
+
+  <!-- Subtle chalkboard grid -->
+  <g stroke="#2a3040" stroke-width="1" opacity="0.45">
+    <path d="M64 40v320M128 40v320M192 40v320M256 40v320M320 40v320M384 40v320M448 40v320M512 40v320M576 40v320"/>
+    <path d="M40 80h560M40 160h560M40 240h560M40 320h560"/>
+  </g>
+
+  <!-- Direct encrypted P2P header pill -->
+  <g transform="translate(158 26)">
+    <rect width="324" height="30" rx="15" fill="#171c28" stroke="#3c4252" stroke-width="1.2"/>
+    <circle cx="18" cy="15" r="4" fill="#00e7e7"/>
+    <text x="30" y="19" fill="#c9cede" font-family="Consolas, monospace" font-size="11.5" letter-spacing="0.06em">P2P · DIRECT E2EE · NO SERVER</text>
+  </g>
+
+  <!-- Shared strokes drawn collaboratively -->
+  <path d="M98 258 C144 148 228 140 282 214 C312 254 348 262 390 220" stroke="#00e7e7" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M98 258 C144 148 228 140 282 214 C312 254 348 262 390 220" stroke="#00e7e7" stroke-width="14" stroke-linecap="round" opacity="0.14"/>
+
+  <path d="M532 142 C480 120 420 156 392 218 C368 272 316 306 250 286" stroke="#ec2dff" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M532 142 C480 120 420 156 392 218 C368 272 316 306 250 286" stroke="#ec2dff" stroke-width="14" stroke-linecap="round" opacity="0.14"/>
+
+  <!-- Yellow chalk spark where strokes meet -->
+  <g stroke="#f1f907" stroke-width="2.4" stroke-linecap="round">
+    <path d="M391 196v-12M391 244v12M367 220h-12M415 220h12"/>
+    <path d="M374 203l-8-8M408 237l8 8M408 203l8-8M374 237l-8 8"/>
+  </g>
+
+  <!-- Peer A cursor -->
+  <g transform="translate(262 276)">
+    <path d="M0 0l5 19 4.5-6.5 7-1.5L0 0z" fill="#00e7e7" stroke="#10131b" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="16" y="10" width="60" height="22" rx="4" fill="#171c28" stroke="#00e7e7" stroke-width="1.2"/>
+    <text x="46" y="25" text-anchor="middle" fill="#f0f0f3" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600">Peer 1</text>
+  </g>
+
+  <!-- Peer B cursor -->
+  <g transform="translate(524 134)">
+    <path d="M0 0l5 19 4.5-6.5 7-1.5L0 0z" fill="#ec2dff" stroke="#10131b" stroke-width="1.5" stroke-linejoin="round"/>
+    <rect x="-74" y="10" width="60" height="22" rx="4" fill="#171c28" stroke="#ec2dff" stroke-width="1.2"/>
+    <text x="-44" y="25" text-anchor="middle" fill="#f0f0f3" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600">Peer 2</text>
+  </g>
+
+  <!-- Token exchange footer ribbon -->
+  <g transform="translate(88 338)">
+    <rect width="464" height="34" rx="5" fill="#151923" stroke="#2d3343" stroke-width="1"/>
+    <text x="16" y="21" fill="#60d9ed" font-family="Consolas, monospace" font-size="11">ezp://...</text>
+    <path d="M98 17h128" stroke="#8a1bff" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round"/>
+    <text x="232" y="21" text-anchor="middle" fill="#adb3c3" font-family="Consolas, monospace" font-size="10.5">UDP NAT punch</text>
+    <path d="M292 17h86" stroke="#ec2dff" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round"/>
+    <text x="448" y="21" text-anchor="end" fill="#f28bd5" font-family="Consolas, monospace" font-size="11">ezpr://...</text>
+  </g>
+</svg>

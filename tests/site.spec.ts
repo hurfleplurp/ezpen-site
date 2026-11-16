@@ -61,11 +61,14 @@ test('page loads cleanly, navigation works, and the public download is offered',
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Easyis better.');
   await page.getByRole('link', { name: 'Get ezPen' }).click();
   await expect(page).toHaveURL(/#download$/);
-  await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
-  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+  await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
+  await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
   await expect(page.locator('#download-size')).toBeVisible();
-  await expect(page.locator('#download-size')).toHaveText(/~4\.6 MB/);
-  await expect(page.locator('#download-action a')).toHaveCount(2);
+  await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
+  await expect(page.locator('#download-offline-size')).toBeVisible();
+  await expect(page.locator('#download-offline-size')).toHaveText(/~4\.6 MB/);
+  await expect(page.locator('#download-action a')).toHaveCount(3);
   const brokenImages = await page.locator('img').evaluateAll(images =>
     images.filter(image => !image.complete || image.naturalWidth === 0).map(image => image.src));
   expect(brokenImages).toEqual([]);
@@ -93,9 +96,11 @@ test('default release links work without JavaScript', async ({ browser }) => {
   try {
     const page = await context.newPage();
     await page.goto('http://127.0.0.1:4178/');
-    await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
-    await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
-    await expect(page.locator('#download-size')).toHaveText(/~4\.6 MB/);
+    await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
+    await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
+    await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+    await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
+    await expect(page.locator('#download-offline-size')).toHaveText(/~4\.6 MB/);
   } finally {
     await context.close();
   }
@@ -104,9 +109,9 @@ test('default release links work without JavaScript', async ({ browser }) => {
 test('configured public download, checksum, release notes and canonical URL are wired', async ({ page }) => {
   await page.goto('http://127.0.0.1:4179/');
   await expect(page.getByText('Windows release in preparation')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
   await expect(page.locator('#download-size')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveAttribute('href', 'https://downloads.example.com/SHA256SUMS.txt');
+  await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://downloads.example.com/SHA256SUMS.txt');
   await expect(page.getByRole('link', { name: 'Release notes' })).toHaveAttribute('href', 'https://example.com/releases');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://example.com/');
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://example.com/');
@@ -114,8 +119,8 @@ test('configured public download, checksum, release notes and canonical URL are 
 
 test('a custom download does not retain the default checksum', async ({ page }) => {
   await page.goto('http://127.0.0.1:4181/');
-  await expect(page.getByRole('link', { name: 'Download ezPen for Windows' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
-  await expect(page.getByRole('link', { name: 'SHA-256 checksum' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveCount(0);
   await expect(page.locator('#download-size')).toHaveCount(0);
 });
 
@@ -151,7 +156,7 @@ test('the pens and infinite canvas use real application icons', async ({ page })
 test('feature highlights have the requested order and updated copy', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.essentials .feature h2')).toHaveText([
-    'Room for everything.', 'Like Glass', 'Watch it back.', 'Native pen support.',
+    'Room for everything.', 'Like Glass', 'Watch it back.', 'Native pen support.', 'Draw together.',
   ]);
   await expect(page.getByRole('heading', { name: 'Change your mind.' })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'That colour. Anywhere.' })).toHaveCount(0);
@@ -271,6 +276,26 @@ test('native pen highlight shows the supplied artwork and requested copy', async
   const text = await feature.locator('.feature-content').boundingBox();
   if (!media || !text) throw new Error('Missing native pen feature layout.');
   expect(media.x).toBeGreaterThan(text.x + text.width);
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(image).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
+test('P2P collab highlight calls out the network-enabled version in an alternating layout', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const feature = page.locator('.feature-collab');
+  await expect(feature.locator('.feature-edition')).toHaveText('Network-enabled version');
+  await expect(feature.getByRole('heading', { name: 'Draw together.' })).toBeVisible();
+  await expect(feature.locator('p').last()).toContainText('peer-to-peer');
+  await expect(feature.locator('p').last()).toContainText('network-enabled version');
+  const image = feature.locator('img');
+  await expect(image).toHaveAttribute('src', '/screenshots/p2p-collab.svg');
+  await expect(image).toBeVisible();
+  const media = await image.boundingBox();
+  const text = await feature.locator('.feature-content').boundingBox();
+  if (!media || !text) throw new Error('Missing P2P collab feature layout.');
+  expect(media.x + media.width).toBeLessThan(text.x);
   await page.setViewportSize({ width: 390, height: 900 });
   await expect(image).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
@@ -412,11 +437,11 @@ test('touch can toggle a horizontal preview on a narrow screen', async ({ browse
 test('copy stays short, with chalk accents instead of feature essays', async ({ page }) => {
   await page.goto('/');
   const count = await page.locator('body').innerText();
-  expect(count.trim().split(/\s+/).length).toBeLessThanOrEqual(230);
+  expect(count.trim().split(/\s+/).length).toBeLessThanOrEqual(280);
   await page.locator('summary').click();
   const expanded = await page.locator('body').innerText();
-  expect(expanded.trim().split(/\s+/).length).toBeLessThanOrEqual(310);
-  expect(await page.locator('.chalk-line').count()).toBeGreaterThanOrEqual(7);
+  expect(expanded.trim().split(/\s+/).length).toBeLessThanOrEqual(360);
+  expect(await page.locator('.chalk-line').count()).toBeGreaterThanOrEqual(8);
   await expect(page.locator('body')).toHaveCSS('background-image', /board-grain\.svg/);
 });
 
@@ -487,7 +512,7 @@ test('artwork colors are sampled from the hero and used as accents', async ({ pa
   });
   expect(result.tokens).toEqual(['#8a1bff', '#ec2dff', '#00e7e7', '#f1f907']);
   expect(result.found).toEqual([true, true, true, true]);
-  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)']);
+  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)', 'rgb(0, 231, 231)']);
   await expect(page.locator('.hero-underline')).toHaveCSS('color', 'rgb(236, 45, 255)');
   await expect(page.locator('.button-primary').first()).toHaveCSS('background-color', 'rgb(0, 231, 231)');
 });

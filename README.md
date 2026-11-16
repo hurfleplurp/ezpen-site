@@ -77,14 +77,15 @@ use the same directory in `public` before building. Deploy binaries, checksums
 and the page version together; do not commit the binary mirrors to this website
 repository. GitHub remains the release archive and release-notes destination.
 
-The download section links to the latest public Windows executable and its SHA-256 checksum in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
+The download section links to the latest public Windows executables (networked and offline) and their shared SHA-256 checksums in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
 
-The approximate size beside the download button is maintained in `index.html` for the current release (4,622,848 bytes, or about 4.6 MB). Update it when publishing a release with a different executable size. It is hidden when a custom executable URL is configured.
+The approximate sizes beside the download buttons are maintained in `index.html` for the current builds (`ezPen.exe`: 4,809,728 bytes, ~4.8 MB; `ezPen-offline.exe`: 4,622,848 bytes, ~4.6 MB). Update them when publishing a release with different executable sizes. They are hidden when custom executable URLs are configured.
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_EZPEN_DOWNLOAD_URL` | Optional public HTTPS URL overriding the Windows executable. |
-| `VITE_EZPEN_CHECKSUM_URL` | Optional public HTTPS URL for the matching SHA-256 checksum. If the executable is overridden without this, the default checksum link is hidden to avoid mismatching files. |
+| `VITE_EZPEN_DOWNLOAD_URL` | Optional public HTTPS URL overriding the networked Windows executable. |
+| `VITE_EZPEN_OFFLINE_DOWNLOAD_URL` | Optional public HTTPS URL overriding the offline Windows executable. |
+| `VITE_EZPEN_CHECKSUM_URL` | Optional public HTTPS URL for the matching SHA-256 checksums. If an executable is overridden without this, the default checksum link is hidden to avoid mismatching files. |
 | `VITE_EZPEN_RELEASES_URL` | Optional public release-notes page. |
 | `VITE_SITE_URL` | Optional canonical production origin. |
 
@@ -101,7 +102,7 @@ For local configuration, copy `.env.example` to `.env.local`. Vite embeds these 
 - The infinite-canvas, "Watch it back", and "Like Glass" features use the supplied looping APNGs unchanged. First-frame stills are shown instead when the visitor prefers reduced motion.
 - The supplied ggezPen gameplay loop appears below the decorative ribbon in the hero's right column, stacking below the introduction on mobile. The APNG is unchanged; reduced-motion visitors see its first-frame poster.
 - The native pen feature uses the supplied `public/screenshots/stylus-feature.png` artwork.
-- Feature highlights appear in order: infinite canvas, Like Glass, Watch it back, and native pen support. Their images alternate sides on desktop.
+- Feature highlights appear in order: infinite canvas, Like Glass, Watch it back, native pen support, and P2P collab (network-enabled version). Their images alternate sides on desktop.
 - The tool shelf and feature illustrations use the actual application icons, not redrawn approximations. The former simulated pen studies and per-pen marketing paragraphs have been removed.
 - `public/icons` contains application icons, including the supplied replacements for Marker, Chalk, and Chalk Marker.
 - The pen shelf keeps every pen accessible. Hovering expands the selected item with a horizontal stroke preview immediately to its right; earlier pens stay left and later pens move right. Leaving the shelf restores the evenly spaced row. Keyboard focus also previews a pen (Escape closes it), and touch users can tap to toggle. Selection is driven by pointer movement rather than layout-triggered hover events to prevent disappearance during reflow.

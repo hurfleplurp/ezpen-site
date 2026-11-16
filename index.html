@@ -129,17 +129,29 @@
             <svg class="chalk-line feature-mark" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true"><path d="M5 9q101-8 229-2" /></svg>
           </div>
         </article>
+        <article class="feature feature-image-left feature-collab">
+          <div class="feature-image"><img src="/screenshots/p2p-collab.svg" alt="Two peers drawing live on a shared canvas over an encrypted direct peer-to-peer connection" width="640" height="400" /></div>
+          <div class="feature-content">
+            <p class="feature-edition">Network-enabled version</p>
+            <h2>Draw together.</h2>
+            <p>Direct peer-to-peer collab over one-time invite tokens. Live strokes and cursors with no central server, in the network-enabled version.</p>
+            <svg class="chalk-line feature-mark" viewBox="0 0 240 16" preserveAspectRatio="none" aria-hidden="true"><path d="M5 9q101-8 229-2" /></svg>
+          </div>
+        </article>
       </section>
 
       <section class="download-section wrap" id="download" aria-labelledby="download-title">
         <svg class="chalk-line download-loop" viewBox="0 0 260 200" aria-hidden="true"><path d="M44 68C5 109 53 160 142 153s117-75 56-102C141 25 55 31 27 76" /></svg>
         <p class="handwritten download-note-heading">less setup. more scribbling.</p>
         <h2 id="download-title">Just <span>draw.</span></h2>
-        <p class="download-subtitle">Native Windows. Fast by design. Yours to doodle on.</p>
+        <p class="download-subtitle">Native Windows. Pick networked for P2P collab, or offline with zero network code.</p>
         <div id="download-action">
-          <a id="download-link" class="button button-primary" href="https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe">Download ezPen for Windows <span aria-hidden="true">↗</span></a>
-          <p class="download-note">Free · One executable · <span id="download-size">~4.6 MB · </span>Open it and draw.</p>
-          <a id="checksum-link" class="release-link" href="https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt">SHA-256 checksum ↗</a>
+          <div class="download-editions">
+            <a id="download-link" class="button button-primary" href="https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe">Download Networked <span aria-hidden="true">↗</span></a>
+            <a id="download-offline-link" class="button button-secondary" href="https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe">Download Offline <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="download-note">Free · Single executables · Networked <span id="download-size">~4.8 MB </span>(P2P collab) · Offline <span id="download-offline-size">~4.6 MB </span>(zero network code)</p>
+          <a id="checksum-link" class="release-link" href="https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt">SHA-256 checksums ↗</a>
         </div>
         <p class="system-requirements">Windows 10 / 11 · 64-bit · OpenGL 3.3+</p>
       </section>
@@ -150,7 +162,7 @@
           <div class="details-content">
             <p><strong>Saved. Automatically.</strong> Boards stay on your computer in <code>%LOCALAPPDATA%\ezpen</code>. Use <code>--portable</code> to keep everything beside the app.</p>
             <p><strong>Undo goes back.</strong> Recent actions stay in memory; older history lives on disk. Drawing after undo replaces the redo branch.</p>
-            <p><strong>Windows, for now.</strong> A standalone executable. No installer, account, or bundled browser.</p>
+            <p><strong>Two Windows editions.</strong> Standalone executables with no installer or account: networked enables direct P2P collab; offline removes all networking.</p>
           </div>
         </details>
       </div>
