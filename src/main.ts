@@ -20,6 +20,9 @@ function setupRelease(): void {
     requiredElement<HTMLAnchorElement>('#download-offline-link').href = offlineDownloadUrl;
     requiredElement<HTMLElement>('#download-offline-size').remove();
   }
+  if (downloadUrl || offlineDownloadUrl) {
+    requiredElement<HTMLElement>('#download-version').remove();
+  }
   const checksumLink = requiredElement<HTMLAnchorElement>('#checksum-link');
   if (checksumUrl) {
     checksumLink.href = checksumUrl;

@@ -64,6 +64,8 @@ test('page loads cleanly, navigation works, and the public download is offered',
   await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
   await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
   await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+  await expect(page.locator('#download-version')).toBeVisible();
+  await expect(page.locator('#download-version')).toHaveText(/v0\.3\.0/);
   await expect(page.locator('#download-size')).toBeVisible();
   await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
   await expect(page.locator('#download-offline-size')).toBeVisible();
@@ -99,6 +101,7 @@ test('default release links work without JavaScript', async ({ browser }) => {
     await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
     await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
     await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
+    await expect(page.locator('#download-version')).toHaveText(/v0\.3\.0/);
     await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
     await expect(page.locator('#download-offline-size')).toHaveText(/~4\.6 MB/);
   } finally {
@@ -110,6 +113,7 @@ test('configured public download, checksum, release notes and canonical URL are 
   await page.goto('http://127.0.0.1:4179/');
   await expect(page.getByText('Windows release in preparation')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.locator('#download-version')).toHaveCount(0);
   await expect(page.locator('#download-size')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://downloads.example.com/SHA256SUMS.txt');
   await expect(page.getByRole('link', { name: 'Release notes' })).toHaveAttribute('href', 'https://example.com/releases');

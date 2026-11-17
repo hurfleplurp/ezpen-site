@@ -79,7 +79,7 @@ repository. GitHub remains the release archive and release-notes destination.
 
 The download section links to the latest public Windows executables (networked and offline) and their shared SHA-256 checksums in `hurfleplurp/ezPen-releases`. These default links work without JavaScript and follow the latest GitHub release. Optional Vercel environment variables can override them when JavaScript is enabled:
 
-The approximate sizes beside the download buttons are maintained in `index.html` for the current builds (`ezPen.exe`: 4,809,728 bytes, ~4.8 MB; `ezPen-offline.exe`: 4,622,848 bytes, ~4.6 MB). Update them when publishing a release with different executable sizes. They are hidden when custom executable URLs are configured.
+The current version (`v0.3.0`) and approximate sizes beside the download buttons are maintained in `index.html` (`ezPen.exe`: 4,809,728 bytes, ~4.8 MB; `ezPen-offline.exe`: 4,622,848 bytes, ~4.6 MB). Update them when publishing a release with a different version or executable sizes. They are hidden when custom executable URLs are configured.
 
 | Variable | Purpose |
 | --- | --- |
