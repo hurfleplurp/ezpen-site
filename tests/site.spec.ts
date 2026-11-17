@@ -143,13 +143,13 @@ test('the pens and infinite canvas use real application icons', async ({ page })
   expect(await page.locator('.pen-shelf img[src^="/icons/"]').evaluateAll(images => images.map(image => image.getAttribute('src'))))
     .toEqual(['/icons/fineliner.png', '/icons/pencil.png', '/icons/brush.png', '/icons/marker.png', '/icons/chalk.png', '/icons/chalk_marker.png']);
   expect(await page.locator('.feature-icon img').evaluateAll(images => images.map(image => image.getAttribute('src'))))
-    .toEqual(['/icons/fit-all.png']);
+    .toEqual(['/icons/fit-all.png', '/icons/glass.svg', '/icons/timeline.png', '/icons/fineliner.png']);
   const icons = await page.locator('img[src^="/icons/"]').evaluateAll(images => images.map(image => ({
     loaded: image.complete && image.naturalWidth > 0,
     ratio: image.naturalWidth / image.naturalHeight,
     expectedRatio: Number(image.getAttribute('width')) / Number(image.getAttribute('height')),
   })));
-  expect(icons).toHaveLength(7);
+  expect(icons).toHaveLength(10);
   for (const icon of icons) {
     expect(icon.loaded).toBe(true);
     expect(icon.ratio).toBeCloseTo(icon.expectedRatio, 3);
@@ -160,7 +160,7 @@ test('the pens and infinite canvas use real application icons', async ({ page })
 test('feature highlights have the requested order and updated copy', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.essentials .feature h2')).toHaveText([
-    'Room for everything.', 'Like Glass', 'Watch it back.', 'Native pen support.', 'Draw together.',
+    'Room for everything.', 'Like Glass', 'Watch it back.', 'Native pen support.', 'Draw together.', 'Agent access.',
   ]);
   await expect(page.getByRole('heading', { name: 'Change your mind.' })).toHaveCount(0);
   await expect(page.getByRole('heading', { name: 'That colour. Anywhere.' })).toHaveCount(0);
@@ -206,7 +206,7 @@ test('undo timeline highlight plays the supplied looping APNG in an alternating 
   const feature = page.locator('.feature-timeline');
   await expect(feature.getByRole('heading', { name: 'Watch it back.' })).toBeVisible();
   await expect(feature.locator('p')).toHaveText('The undo timeline lets you go back to any point in time instantly. Press play and watch back the creative process.');
-  const image = feature.locator('img');
+  const image = feature.locator('.feature-image img');
   await expect(image).toHaveAttribute('src', '/screenshots/undo-timeline.apng');
   await expect(image).toBeVisible();
   expect(await image.evaluate(element => element.currentSrc)).toContain('/screenshots/undo-timeline.apng');
@@ -238,7 +238,7 @@ test('Like Glass highlight plays the supplied looping APNG', async ({ page, requ
   const feature = page.locator('.feature-passthrough');
   await expect(feature.getByRole('heading', { name: 'Like Glass', exact: true })).toBeVisible();
   await expect(feature.locator('p')).toHaveText('Annotate anything on your desktop. Full pass-through with a single keystroke.');
-  const image = feature.locator('img');
+  const image = feature.locator('.feature-image img');
   await expect(image).toHaveAttribute('src', '/screenshots/desktop-passthrough.apng');
   await expect(image).toBeVisible();
   expect(await image.evaluate(element => ({ src: element.currentSrc, width: element.naturalWidth, height: element.naturalHeight })))
@@ -271,7 +271,7 @@ test('native pen highlight shows the supplied artwork and requested copy', async
   const feature = page.locator('.feature-stylus');
   await expect(feature.getByRole('heading', { name: 'Native pen support.' })).toBeVisible();
   await expect(feature.locator('p')).toHaveText('Full range pressure sensitivity. Zero latency means responsive, natural lines.');
-  const image = feature.locator('img');
+  const image = feature.locator('.feature-image img');
   await expect(image).toHaveAttribute('src', '/screenshots/stylus-feature.png');
   await expect(image).toBeVisible();
   expect(await image.evaluate(element => ({ width: element.naturalWidth, height: element.naturalHeight })))
@@ -293,7 +293,7 @@ test('P2P collab highlight calls out the network-enabled version in an alternati
   await expect(feature.getByRole('heading', { name: 'Draw together.' })).toBeVisible();
   await expect(feature.locator('p').last()).toContainText('peer-to-peer');
   await expect(feature.locator('p').last()).toContainText('network-enabled version');
-  const image = feature.locator('img');
+  const image = feature.locator('.feature-image img');
   await expect(image).toHaveAttribute('src', '/screenshots/p2p-collab.svg');
   await expect(image).toBeVisible();
   const media = await image.boundingBox();
@@ -302,6 +302,47 @@ test('P2P collab highlight calls out the network-enabled version in an alternati
   expect(media.x + media.width).toBeLessThan(text.x);
   await page.setViewportSize({ width: 390, height: 900 });
   await expect(image).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
+test('Agent access highlight displays MCP copy and two side-by-side equal-height autoplaying videos', async ({ page, request }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const feature = page.locator('.feature-agent');
+  await expect(feature.getByRole('heading', { name: 'Agent access.' })).toBeVisible();
+  await expect(feature.locator('p')).toContainText('MCP');
+  const videos = feature.locator('video');
+  await expect(videos).toHaveCount(2);
+  for (const src of ['/screenshots/subby_emerge2.mp4', '/screenshots/ezpeniscute_edit.mp4']) {
+    const res = await request.head(src);
+    expect(res.ok()).toBe(true);
+  }
+  const attrs = await videos.evaluateAll(elements => elements.map(v => ({
+    autoplay: v.hasAttribute('autoplay'),
+    muted: v.muted,
+    loop: v.loop,
+    playsInline: v.playsInline,
+    widthAttr: Number(v.getAttribute('width')),
+    heightAttr: Number(v.getAttribute('height')),
+    source: v.querySelector('source')?.getAttribute('src'),
+  })));
+  expect(attrs).toEqual([
+    { autoplay: true, muted: true, loop: true, playsInline: true, widthAttr: 370, heightAttr: 452, source: '/screenshots/subby_emerge2.mp4' },
+    { autoplay: true, muted: true, loop: true, playsInline: true, widthAttr: 828, heightAttr: 452, source: '/screenshots/ezpeniscute_edit.mp4' },
+  ]);
+  const v1 = await videos.nth(0).boundingBox();
+  const v2 = await videos.nth(1).boundingBox();
+  const text = await feature.locator('.feature-content').boundingBox();
+  if (!v1 || !v2 || !text) throw new Error('Missing Agent access layout bounds.');
+  expect(v1.x + v1.width).toBeLessThan(v2.x);
+  expect(Math.abs(v1.height - v2.height)).toBeLessThanOrEqual(2);
+  expect(v1.x).toBeGreaterThan(text.x + text.width);
+  await page.setViewportSize({ width: 390, height: 900 });
+  const mv1 = await videos.nth(0).boundingBox();
+  const mv2 = await videos.nth(1).boundingBox();
+  if (!mv1 || !mv2) throw new Error('Missing mobile video bounds.');
+  expect(mv1.x + mv1.width).toBeLessThan(mv2.x);
+  expect(Math.abs(mv1.height - mv2.height)).toBeLessThanOrEqual(2);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
@@ -441,11 +482,11 @@ test('touch can toggle a horizontal preview on a narrow screen', async ({ browse
 test('copy stays short, with chalk accents instead of feature essays', async ({ page }) => {
   await page.goto('/');
   const count = await page.locator('body').innerText();
-  expect(count.trim().split(/\s+/).length).toBeLessThanOrEqual(280);
+  expect(count.trim().split(/\s+/).length).toBeLessThanOrEqual(305);
   await page.locator('summary').click();
   const expanded = await page.locator('body').innerText();
-  expect(expanded.trim().split(/\s+/).length).toBeLessThanOrEqual(360);
-  expect(await page.locator('.chalk-line').count()).toBeGreaterThanOrEqual(8);
+  expect(expanded.trim().split(/\s+/).length).toBeLessThanOrEqual(385);
+  expect(await page.locator('.chalk-line').count()).toBeGreaterThanOrEqual(9);
   await expect(page.locator('body')).toHaveCSS('background-image', /board-grain\.svg/);
 });
 
@@ -516,7 +557,7 @@ test('artwork colors are sampled from the hero and used as accents', async ({ pa
   });
   expect(result.tokens).toEqual(['#8a1bff', '#ec2dff', '#00e7e7', '#f1f907']);
   expect(result.found).toEqual([true, true, true, true]);
-  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)', 'rgb(0, 231, 231)']);
+  expect(result.featureMarks).toEqual(['rgb(0, 231, 231)', 'rgb(236, 45, 255)', 'rgb(138, 27, 255)', 'rgb(241, 249, 7)', 'rgb(0, 231, 231)', 'rgb(236, 45, 255)']);
   await expect(page.locator('.hero-underline')).toHaveCSS('color', 'rgb(236, 45, 255)');
   await expect(page.locator('.button-primary').first()).toHaveCSS('background-color', 'rgb(0, 231, 231)');
 });

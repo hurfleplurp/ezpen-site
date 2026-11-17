@@ -112,5 +112,25 @@ function setupPenShelf(): void {
   }
 }
 
+function setupAgentVideos(): void {
+  const videos = Array.from(document.querySelectorAll<HTMLVideoElement>('.feature-agent-media video'));
+  if (videos.length === 0) return;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const syncPlayback = (): void => {
+    for (const video of videos) {
+      if (reducedMotion.matches) {
+        video.pause();
+        video.removeAttribute('autoplay');
+      } else {
+        video.muted = true;
+        video.play().catch(() => {});
+      }
+    }
+  };
+  syncPlayback();
+  reducedMotion.addEventListener('change', syncPlayback);
+}
+
 setupRelease();
 setupPenShelf();
+setupAgentVideos();
