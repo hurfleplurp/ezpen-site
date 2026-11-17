@@ -9,24 +9,17 @@ function requiredElement<T extends Element>(selector: string): T {
 
 function setupRelease(): void {
   const downloadUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_DOWNLOAD_URL, 'VITE_EZPEN_DOWNLOAD_URL');
-  const offlineDownloadUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_OFFLINE_DOWNLOAD_URL, 'VITE_EZPEN_OFFLINE_DOWNLOAD_URL');
   const checksumUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_CHECKSUM_URL, 'VITE_EZPEN_CHECKSUM_URL');
   const releasesUrl = publicHttpsUrl(import.meta.env.VITE_EZPEN_RELEASES_URL, 'VITE_EZPEN_RELEASES_URL');
   if (downloadUrl) {
     requiredElement<HTMLAnchorElement>('#download-link').href = downloadUrl;
     requiredElement<HTMLElement>('#download-size').remove();
-  }
-  if (offlineDownloadUrl) {
-    requiredElement<HTMLAnchorElement>('#download-offline-link').href = offlineDownloadUrl;
-    requiredElement<HTMLElement>('#download-offline-size').remove();
-  }
-  if (downloadUrl || offlineDownloadUrl) {
     requiredElement<HTMLElement>('#download-version').remove();
   }
   const checksumLink = requiredElement<HTMLAnchorElement>('#checksum-link');
   if (checksumUrl) {
     checksumLink.href = checksumUrl;
-  } else if (downloadUrl || offlineDownloadUrl) {
+  } else if (downloadUrl) {
     checksumLink.remove();
   }
   if (releasesUrl) {

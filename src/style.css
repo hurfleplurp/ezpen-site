@@ -75,7 +75,7 @@ h1 { font-size: clamp(72px, 8.6vw, 116px); font-weight: 550; line-height: 1.05; 
 .note-arrow path { stroke-width: 2; }
 .hero-summary { margin-top: 42px; font-size: 17px; }
 .hero-actions { display: flex; align-items: center; gap: 25px; margin-top: 26px; }
-.button { display: inline-flex; align-items: center; justify-content: center; gap: 29px; padding: 15px 22px; min-height: 49px; font-size: 13px; font-weight: 600; border: 1px solid transparent; border-radius: 3px 5px 3px 4px; transition: background .15s, border-color .15s, color .15s, transform .15s; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 29px; padding: 15px 22px; min-height: 49px; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid transparent; border-radius: 3px 5px 3px 4px; transition: background .15s, border-color .15s, color .15s, transform .15s; }
 .button-primary { background: var(--art-cyan); color: #14171f; }
 .button-primary:hover { background: var(--art-yellow); transform: rotate(-1deg); }
 .button-secondary { background: #1a1f2b; color: var(--ink); border-color: #4f5870; }

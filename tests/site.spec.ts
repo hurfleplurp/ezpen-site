@@ -61,16 +61,21 @@ test('page loads cleanly, navigation works, and the public download is offered',
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Easyis better.');
   await page.getByRole('link', { name: 'Get ezPen' }).click();
   await expect(page).toHaveURL(/#download$/);
-  await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
-  await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
+  await expect(page.getByRole('link', { name: 'Download ezPen' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
+  const onlineButton = page.locator('#online-button');
+  await expect(onlineButton).toBeVisible();
+  await expect(onlineButton).toHaveText('ezPen Online');
+  expect(await onlineButton.evaluate(el => el.tagName)).toBe('BUTTON');
+  await expect(onlineButton).not.toHaveAttribute('href');
+  await onlineButton.click();
+  await expect(page).toHaveURL(/#download$/);
   await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
   await expect(page.locator('#download-version')).toBeVisible();
   await expect(page.locator('#download-version')).toHaveText(/v0\.3\.3/);
   await expect(page.locator('#download-size')).toBeVisible();
-  await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
-  await expect(page.locator('#download-offline-size')).toBeVisible();
-  await expect(page.locator('#download-offline-size')).toHaveText(/~4\.6 MB/);
-  await expect(page.locator('#download-action a')).toHaveCount(3);
+  await expect(page.locator('#download-size')).toHaveText(/~4\.6 MB/);
+  await expect(page.locator('#download-action a')).toHaveCount(2);
+  await expect(page.locator('a[href*="ezPen.exe"]')).toHaveCount(0);
   const brokenImages = await page.locator('img').evaluateAll(images =>
     images.filter(image => !image.complete || image.naturalWidth === 0).map(image => image.src));
   expect(brokenImages).toEqual([]);
@@ -98,12 +103,11 @@ test('default release links work without JavaScript', async ({ browser }) => {
   try {
     const page = await context.newPage();
     await page.goto('http://127.0.0.1:4178/');
-    await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
-    await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
+    await expect(page.getByRole('link', { name: 'Download ezPen' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
+    await expect(page.locator('#online-button')).toHaveText('ezPen Online');
     await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
     await expect(page.locator('#download-version')).toHaveText(/v0\.3\.3/);
-    await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
-    await expect(page.locator('#download-offline-size')).toHaveText(/~4\.6 MB/);
+    await expect(page.locator('#download-size')).toHaveText(/~4\.6 MB/);
   } finally {
     await context.close();
   }
@@ -112,7 +116,7 @@ test('default release links work without JavaScript', async ({ browser }) => {
 test('configured public download, checksum, release notes and canonical URL are wired', async ({ page }) => {
   await page.goto('http://127.0.0.1:4179/');
   await expect(page.getByText('Windows release in preparation')).toHaveCount(0);
-  await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'Download ezPen' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
   await expect(page.locator('#download-version')).toHaveCount(0);
   await expect(page.locator('#download-size')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://downloads.example.com/SHA256SUMS.txt');
@@ -123,7 +127,7 @@ test('configured public download, checksum, release notes and canonical URL are 
 
 test('a custom download does not retain the default checksum', async ({ page }) => {
   await page.goto('http://127.0.0.1:4181/');
-  await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
+  await expect(page.getByRole('link', { name: 'Download ezPen' })).toHaveAttribute('href', 'https://downloads.example.com/ezPen.exe');
   await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveCount(0);
   await expect(page.locator('#download-size')).toHaveCount(0);
 });
@@ -285,14 +289,14 @@ test('native pen highlight shows the supplied artwork and requested copy', async
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
-test('P2P collab highlight calls out the network-enabled version in an alternating layout', async ({ page }) => {
+test('P2P collab highlight calls out ezPen Online in an alternating layout', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/');
   const feature = page.locator('.feature-collab');
-  await expect(feature.locator('.feature-edition')).toHaveText('Network-enabled version');
+  await expect(feature.locator('.feature-edition')).toHaveText('ezPen Online');
   await expect(feature.getByRole('heading', { name: 'Draw together.' })).toBeVisible();
   await expect(feature.locator('p').last()).toContainText('peer-to-peer');
-  await expect(feature.locator('p').last()).toContainText('network-enabled version');
+  await expect(feature.locator('p').last()).toContainText('ezPen Online');
   const image = feature.locator('.feature-image img');
   await expect(image).toHaveAttribute('src', '/screenshots/p2p-collab.svg');
   await expect(image).toBeVisible();
