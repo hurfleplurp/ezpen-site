@@ -65,7 +65,7 @@ test('page loads cleanly, navigation works, and the public download is offered',
   await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
   await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
   await expect(page.locator('#download-version')).toBeVisible();
-  await expect(page.locator('#download-version')).toHaveText(/v0\.3\.0/);
+  await expect(page.locator('#download-version')).toHaveText(/v0\.3\.1/);
   await expect(page.locator('#download-size')).toBeVisible();
   await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
   await expect(page.locator('#download-offline-size')).toBeVisible();
@@ -101,7 +101,7 @@ test('default release links work without JavaScript', async ({ browser }) => {
     await expect(page.getByRole('link', { name: 'Download Networked' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen.exe');
     await expect(page.getByRole('link', { name: 'Download Offline' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/ezPen-offline.exe');
     await expect(page.getByRole('link', { name: 'SHA-256 checksums' })).toHaveAttribute('href', 'https://github.com/hurfleplurp/ezPen-releases/releases/latest/download/SHA256SUMS.txt');
-    await expect(page.locator('#download-version')).toHaveText(/v0\.3\.0/);
+    await expect(page.locator('#download-version')).toHaveText(/v0\.3\.1/);
     await expect(page.locator('#download-size')).toHaveText(/~4\.8 MB/);
     await expect(page.locator('#download-offline-size')).toHaveText(/~4\.6 MB/);
   } finally {
