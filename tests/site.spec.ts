@@ -350,6 +350,22 @@ test('Agent access highlight displays MCP copy and two side-by-side equal-height
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
 
+test('licensing copy and contact link are displayed clearly', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  const licensing = page.locator('.licensing');
+  await expect(licensing.getByRole('heading', { name: 'Free for individuals. Built for everyone.' })).toBeVisible();
+  await expect(licensing.getByRole('heading', { name: 'For businesses' })).toBeVisible();
+  await expect(licensing).toContainText('ezPen is free for personal use. No subscriptions, no accounts, no DRM.');
+  await expect(licensing).toContainText('Available as a one-time purchase. No recurring fees.');
+  await expect(licensing).toContainText('Both ezPen and ezPen Online are available under commercial and enterprise licensing agreements.');
+  const contact = licensing.getByRole('link', { name: 'Contact us' });
+  await expect(contact).toHaveAttribute('href', 'mailto:admin@ezpen.ink');
+  await page.setViewportSize({ width: 390, height: 900 });
+  await expect(contact).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
 test('practical details stay tucked away and open with the keyboard', async ({ page }) => {
   await page.goto('/');
   const question = page.locator('summary').filter({ hasText: 'A few details' });
@@ -486,10 +502,10 @@ test('touch can toggle a horizontal preview on a narrow screen', async ({ browse
 test('copy stays short, with chalk accents instead of feature essays', async ({ page }) => {
   await page.goto('/');
   const count = await page.locator('body').innerText();
-  expect(count.trim().split(/\s+/).length).toBeLessThanOrEqual(305);
+  expect(count.trim().split(/\s+/).length).toBeLessThanOrEqual(395);
   await page.locator('summary').click();
   const expanded = await page.locator('body').innerText();
-  expect(expanded.trim().split(/\s+/).length).toBeLessThanOrEqual(385);
+  expect(expanded.trim().split(/\s+/).length).toBeLessThanOrEqual(475);
   expect(await page.locator('.chalk-line').count()).toBeGreaterThanOrEqual(9);
   await expect(page.locator('body')).toHaveCSS('background-image', /board-grain\.svg/);
 });
